@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - File Uploader</title>
+    <link rel="stylesheet" href="../public/styles/general.css" />
+  </head>
+  <body>
+    <nav>
+      <div>
+        <a href="/">File Uploader</a>
+      </div>
+
+      <div>
+        <a href="/login">Login</a>
+        <a href="/register">Sign Up</a>
+      </div>
+    </nav>
+
+    <main class="form-container">
+      <h1>Login</h1>
+      <p>Don't have an account yet ? <a href="/register">Sign Up</a></p>
+      <form action="/login" method="post">
+        <div>
+          <label for="email"> Email* </label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Your email"
+            required
+          />
+        </div>
+        <div>
+          <label for="password"> Password* </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Your password"
+            minlength="8"
+            required
+          />
+        </div>
+
+        <div class="checkbox">
+          <input type="checkbox" />
+          <label> Show Password</label>
+        </div>
+
+        <div>
+          <button type="submit">Log In</button>
+        </div>
+      </form>
+    </main>
+  </body>
+
+  <script>
+    const password = document.querySelector("#password");
+    const checkbox = document.querySelector(`input[type="checkbox"]`);
+
+    checkbox.addEventListener("click", () => {
+      if (password.type == "password") {
+        password.type = "text";
+      } else {
+        password.type = "password";
+      }
+    });
+  </script>
+</html>

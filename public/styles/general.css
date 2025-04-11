@@ -44,6 +44,7 @@ body {
   font-size: var(--fs);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  text-align: center;
 }
 
 nav {
@@ -69,5 +70,29 @@ nav div:nth-child(2) a {
   padding: 8px 15px 10px;
   border: 1px solid gray;
   border-radius: 5px;
+  font-size: var(--sfs);
+}
+
+.form-container,
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  text-align: left;
+  width: 450px;
+}
+
+.form-container {
+  margin: 40px auto;
+}
+
+.form-container a {
+  text-decoration: underline;
+}
+
+form .error-message {
+  margin-top: 10px;
+  color: rgb(255, 70, 70);
   font-size: var(--sfs);
 }

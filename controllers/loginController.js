@@ -1,9 +1,5 @@
 function loginGetReqs(req, res) {
-  // code
+  res.render("login");
 }
 
-function loginPostReqs(req, res) {
-  // code
-}
-
-export { loginGetReqs, loginPostReqs };
+export { loginGetReqs };
