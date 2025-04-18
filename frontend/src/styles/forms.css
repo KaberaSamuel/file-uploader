@@ -1,0 +1,43 @@
+a[href="/"] {
+  font-size: 1.7rem;
+}
+
+nav div:nth-child(2) {
+  display: flex;
+  gap: 15px;
+}
+
+nav div:nth-child(2) a {
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  border: 1px solid white;
+}
+
+.form-container,
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
+  text-align: left;
+  width: 450px;
+}
+
+.form-container {
+  width: fit-content;
+  padding: 30px;
+  margin: 40px auto;
+  border: 1px solid white;
+  border-radius: 30px;
+}
+
+.form-container a {
+  text-decoration: underline;
+}
+
+form .error-message {
+  margin-top: 10px;
+  color: rgb(255, 70, 70);
+  font-size: var(--sfs);
+}
