@@ -4,13 +4,13 @@ import "../styles/forms.css";
 
 function SignUp() {
   const [formFields, setFormFields] = useState({
-    username: "",
+    fullname: "",
     email: "",
     password1: "",
     password2: "",
   });
 
-  const { username, email, password1, password2 } = formFields;
+  const { fullname, email, password1, password2 } = formFields;
   const [seePassword, setSeePassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -65,8 +65,8 @@ function SignUp() {
             <input
               type="text"
               placeholder="jackToph456"
-              name="username"
-              value={username}
+              name="fullname"
+              value={fullname}
               onChange={(e) => {
                 setFormFields({
                   ...formFields,

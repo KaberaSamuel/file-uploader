@@ -24,8 +24,11 @@ async function createTableUsers() {
   `);
 }
 
-async function insertIntoSideUsers(name) {
-  await pool.query("INSERT INTO sideusers (fullname)VALUES ($1)", [name]);
+async function insertIntoUsers(fullname, email, password) {
+  await pool.query(
+    "INSERT INTO users (fullname, email, password)VALUES ($1, $2, $3)",
+    [fullname, email, password]
+  );
 }
 
 async function getAllUsers() {
@@ -33,6 +36,4 @@ async function getAllUsers() {
   return rows;
 }
 
-createTableUsers();
-
-export { getAllUsers };
+export { insertIntoUsers };

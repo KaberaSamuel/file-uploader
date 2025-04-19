@@ -1,5 +1,8 @@
+import bcrypt from "bcrypt";
 import express from "express";
 import cors from "cors";
+
+import { insertIntoUsers } from "./db.js";
 
 const app = express();
 
@@ -11,14 +14,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.get("/allUsers", async (req, res) => {
-//   const users = await getAllUsers();
-//   res.json({ allUsers: users });
-// });
-
 app.post("/addUser", async (req, res) => {
-  console.log(req.body);
-  res.redirect();
+  try {
+    const { fullname, email, password1 } = req.body;
+    const hashedPassword = await bcrypt.hash(password1, 10);
+    await insertIntoUsers(fullname, email, hashedPassword);
+    res.json();
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 app.listen(3000, () => {
