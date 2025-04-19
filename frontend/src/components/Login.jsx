@@ -11,18 +11,18 @@ function Login() {
 
         <div>
           <Link to="/login">Login</Link>
-          <Link to="/register">Sign Up</Link>
+          <Link to="/signup">Sign Up</Link>
         </div>
       </nav>
 
-      <main class="form-container">
+      <main className="form-container login">
         <h1>Login</h1>
         <p>
-          Don't have an account yet ? <a href="/register">Sign Up</a>
+          Don't have an account yet ? <Link to="/signup">Sign Up</Link>
         </p>
         <form>
           <div>
-            <label for="email"> Email* </label>
+            <label> Email* </label>
             <input
               type="email"
               name="email"
@@ -32,18 +32,18 @@ function Login() {
             />
           </div>
           <div>
-            <label for="password"> Password* </label>
+            <label> Password* </label>
             <input
               type="password"
               name="password"
               id="password"
               placeholder="Your password"
-              minlength="8"
+              minLength="8"
               required
             />
           </div>
 
-          <div class="checkbox">
+          <div className="checkbox">
             <input type="checkbox" />
             <label> Show Password</label>
           </div>
