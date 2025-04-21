@@ -1,7 +1,37 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/forms.css";
 
 function Login() {
+  const [formFields, setFormFields] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [seePassword, setSeePassword] = useState(false);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(formFields),
+      });
+
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const { email, password } = formFields;
+
   return (
     <div>
       <nav>
@@ -20,13 +50,19 @@ function Login() {
         <p>
           Don't have an account yet ? <Link to="/signup">Sign Up</Link>
         </p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <label> Email* </label>
             <input
               type="email"
               name="email"
-              id="email"
+              value={email}
+              onChange={(e) => {
+                setFormFields({
+                  ...formFields,
+                  [e.target.name]: e.target.value,
+                });
+              }}
               placeholder="Your email"
               required
             />
@@ -34,9 +70,15 @@ function Login() {
           <div>
             <label> Password* </label>
             <input
-              type="password"
+              type={seePassword ? "text" : "password"}
               name="password"
-              id="password"
+              value={password}
+              onChange={(e) => {
+                setFormFields({
+                  ...formFields,
+                  [e.target.name]: e.target.value,
+                });
+              }}
               placeholder="Your password"
               minLength="8"
               required
@@ -44,7 +86,12 @@ function Login() {
           </div>
 
           <div className="checkbox">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              onClick={() => {
+                setSeePassword(!seePassword);
+              }}
+            />
             <label> Show Password</label>
           </div>
 
