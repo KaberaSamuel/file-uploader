@@ -11,26 +11,11 @@ async function authenticateUser(email, password, done) {
     if (await bcrypt.compare(password, user.password)) {
       return done(null, user);
     } else {
-      return done(null, false, { message: "Password incorrect" });
+      return done(null, false, { message: "Incorrect User Password" });
     }
   } else {
-    return done(null, false, { message: "User email incorrect" });
+    return done(null, false, { message: "Incorrect User Email" });
   }
-}
-
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect("/login");
-}
-
-function checkNotAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return res.redirect("/");
-  }
-  next();
 }
 
 passport.use(new LocalStrategy({ usernameField: "email" }, authenticateUser));
@@ -43,5 +28,3 @@ passport.deserializeUser(async (id, done) => {
   const user = await getUserById(id);
   done(null, user);
 });
-
-export { checkAuthenticated, checkNotAuthenticated };

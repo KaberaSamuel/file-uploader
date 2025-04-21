@@ -9,6 +9,7 @@ function Login() {
   });
 
   const [seePassword, setSeePassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -23,10 +24,15 @@ function Login() {
         body: JSON.stringify(formFields),
       });
 
-      const json = await response.json();
-      console.log(json);
+      if (response.status === 200) {
+        window.location = "/folders";
+      } else if (response.status === 401) {
+        const { message } = await response.json();
+        setErrorMessage(message);
+      }
     } catch (error) {
       console.error(error);
+      window.Location = "/internal-server-error";
     }
   }
 
@@ -36,7 +42,7 @@ function Login() {
     <div>
       <nav>
         <div>
-          <Link to="/">File Uploader</Link>
+          <Link to="/folders">File Uploader</Link>
         </div>
 
         <div>
@@ -94,6 +100,8 @@ function Login() {
             />
             <label> Show Password</label>
           </div>
+
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
 
           <div>
             <button type="submit">Log In</button>

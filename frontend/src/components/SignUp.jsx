@@ -12,7 +12,7 @@ function SignUp() {
 
   const { fullname, email, password1, password2 } = formFields;
   const [seePassword, setSeePassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -45,7 +45,7 @@ function SignUp() {
     <div>
       <nav>
         <div>
-          <Link to="/">File Uploader</Link>
+          <Link to="/folders">File Uploader</Link>
         </div>
 
         <div>
@@ -128,8 +128,6 @@ function SignUp() {
               minLength="8"
               required
             />
-
-            <p className="error-message">{errorMessage}</p>
           </div>
 
           <div className="checkbox">
@@ -141,6 +139,8 @@ function SignUp() {
             />
             <label> Show Password</label>
           </div>
+
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
 
           <div>
             <button type="submit">Create Account</button>

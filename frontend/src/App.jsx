@@ -8,7 +8,7 @@ function App() {
     <div className="app">
       <div>
         <nav>
-          <Link to="/">File Uploader</Link>
+          <Link to="/folders">File Uploader</Link>
           <Link to="/logout">
             <FontAwesomeIcon icon={faArrowRightFromBracket} />
           </Link>

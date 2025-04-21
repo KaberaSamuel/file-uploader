@@ -1,0 +1,17 @@
+.internal-error-component {
+  width: 100vw;
+  height: 100vh;
+  padding: 0 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.internal-error-component a {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid white;
+  border-radius: 20px;
+}
