@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/forms.css";
 
 function Login() {
@@ -10,6 +10,7 @@ function Login() {
 
   const [seePassword, setSeePassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -25,14 +26,14 @@ function Login() {
       });
 
       if (response.status === 200) {
-        window.location = "/folders";
-      } else if (response.status === 401) {
+        navigate("/folders");
+      } else {
         const { message } = await response.json();
         setErrorMessage(message);
       }
     } catch (error) {
       console.error(error);
-      window.Location = "/internal-server-error";
+      navigate("/internal-server-error") ;
     }
   }
 
