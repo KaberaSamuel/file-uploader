@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:3000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,15 +25,15 @@ function Login() {
         body: JSON.stringify(formFields),
       });
 
-      if (response.status === 200) {
-        navigate("/folders");
-      } else {
+      if (!response.ok) {
         const { message } = await response.json();
         setErrorMessage(message);
+      } else {
+        navigate("/folders");
       }
     } catch (error) {
       console.error(error);
-      navigate("/internal-server-error") ;
+      navigate("/internal-server-error");
     }
   }
 

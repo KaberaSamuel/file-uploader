@@ -7,6 +7,16 @@ const database = process.env.DATABASE;
 const password = process.env.PASSWORD;
 const port = process.env.PORT;
 const nodeEnv = process.env.NODE_ENV;
+const jwtSecret = process.env.JWT_SECRET;
 const sessionSecret = process.env.SESSION_SECRET;
 
-export { host, dbUser, database, password, port, nodeEnv, sessionSecret };
+export {
+  host,
+  dbUser,
+  database,
+  password,
+  port,
+  nodeEnv,
+  jwtSecret,
+  sessionSecret,
+};

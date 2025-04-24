@@ -1,24 +1,33 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
 import "./styles/App.css";
-import { useState } from "react";
+
+import { Link, useNavigate, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import Login from "./components/Login";
 
 function App() {
-  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("http://localhost:3000/api/dashboard", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
-  async function handleAuthorization() {
-    const response = await fetch("http://localhost:3000/home");
+      console.log(response);
 
-    if (response.status == 200) {
-      setUser(await response.json());
-      console.log(user);
-    } else {
-      // window.location = "/login";
-    }
-  }
-
-  handleAuthorization();
+      if (response.status === 200) {
+        const { user } = await response.json();
+        console.log(user);
+      } else {
+        return <Navigate to="/login" />;
+      }
+    })();
+  }, [navigate]);
 
   return (
     <div className="app">

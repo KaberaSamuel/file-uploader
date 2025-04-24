@@ -1,34 +1,23 @@
 import passport from "passport";
-import bcrypt from "bcrypt";
-import { Strategy as LocalStrategy } from "passport-local";
+import { ExtractJwt, Strategy as JWTstrategy } from "passport-jwt";
 
-import { getUserByEmail, getUserById } from "../db.js";
+import { jwtSecret } from "./envConfig.js";
+import { getUserById } from "../db.js";
 
-function startPassportInstance() {
-  async function authenticateUser(email, password, done) {
-    const user = await getUserByEmail(email);
+passport.use(
+  new JWTstrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: jwtSecret,
+    },
 
-    if (user) {
-      if (await bcrypt.compare(password, user.password)) {
-        return done(null, user);
-      } else {
-        return done(null, false, { message: "Incorrect User Password" });
+    async (payload, done) => {
+      try {
+        const user = await getUserById(payload.id);
+        if (user) return done(null, user);
+      } catch (error) {
+        return done(error);
       }
-    } else {
-      return done(null, false, { message: "Incorrect User Email" });
     }
-  }
-
-  passport.use(new LocalStrategy({ usernameField: "email" }, authenticateUser));
-
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-
-  passport.deserializeUser(async (id, done) => {
-    const user = await getUserById(id);
-    done(null, user);
-  });
-}
-
-export default startPassportInstance;
+  )
+);
