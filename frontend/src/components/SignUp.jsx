@@ -45,7 +45,7 @@ function SignUp() {
     <div>
       <nav>
         <div>
-          <Link to="/folders">File Uploader</Link>
+          <Link to="/dashboard">File Uploader</Link>
         </div>
 
         <div>

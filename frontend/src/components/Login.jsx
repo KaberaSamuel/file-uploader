@@ -29,7 +29,7 @@ function Login() {
         const { message } = await response.json();
         setErrorMessage(message);
       } else {
-        navigate("/folders");
+        navigate("/dashboard");
       }
     } catch (error) {
       console.error(error);
@@ -43,7 +43,7 @@ function Login() {
     <div>
       <nav>
         <div>
-          <Link to="/folders">File Uploader</Link>
+          <Link to="/dashboard">File Uploader</Link>
         </div>
 
         <div>

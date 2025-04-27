@@ -26,7 +26,7 @@ function authenticateToken(req, res, next) {
   }
 }
 
-authRouter.get("/dashboard", authenticateToken, async (req, res) => {
+authRouter.get("/dashboard", authenticateToken, (req, res) => {
   res.status(200).json({ user: req.user });
 });
 
@@ -46,17 +46,18 @@ authRouter.post("/login", async (req, res, next) => {
         id: user.id,
       },
       jwtSecret,
-      { expiresIn: "1m" }
+      { expiresIn: "30d" }
     );
-
     res.cookie("token", accessToken, { httpOnly: true });
-    return res.end();
+
+    // returning authenticated user
+    return res.json({ user });
   } catch (error) {
     next(error);
   }
 });
 
-authRouter.post("/register", async (req, res) => {
+authRouter.post("/register", async (req, res, next) => {
   try {
     const { fullname, email, password1 } = req.body;
     const hashedPassword = await bcrypt.hash(password1, 10);
@@ -64,6 +65,16 @@ authRouter.post("/register", async (req, res) => {
     res.end();
   } catch (error) {
     console.error(error);
+    next(error);
+  }
+});
+
+authRouter.get("/logout", (req, res, next) => {
+  try {
+    // Clearing JWT cookie
+    res.cookie("token", null);
+    res.status(200).end();
+  } catch (error) {
     next(error);
   }
 });
