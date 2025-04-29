@@ -12,5 +12,8 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.14.1"
+  },
+  "scripts": {
+    "dev": "nodemon --legacy-watch app.js"
   }
 }

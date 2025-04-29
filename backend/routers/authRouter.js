@@ -3,12 +3,29 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
-import "./config/passportConfig.js";
-import { insertIntoUsers, getUserByEmail, getUserById } from "./db.js";
-import { jwtSecret } from "./config/envConfig.js";
+import "../config/passportConfig.js";
+import {
+  insertIntoUsers,
+  insertIntoFolders,
+  getUserByUsername,
+  getUserById,
+  getFolders,
+} from "../db.js";
+import { jwtSecret } from "../config/envConfig.js";
 
 const authRouter = Router();
 const { sign, verify } = jwt;
+
+function formatDate() {
+  const time = Date.now();
+  let date = new Date(time);
+  date = date.toDateString();
+  const dateArray = date.split(" ").splice(1);
+  dateArray[1] += ",";
+  date = dateArray.join(" ");
+
+  return date;
+}
 
 function authenticateToken(req, res, next) {
   try {
@@ -26,15 +43,28 @@ function authenticateToken(req, res, next) {
   }
 }
 
-authRouter.get("/dashboard", authenticateToken, (req, res) => {
-  res.status(200).json({ user: req.user });
+authRouter.get("/dashboard", authenticateToken, async (req, res) => {
+  const user = req.user;
+  user.folders = await getFolders();
+  res.status(200).json({ user });
+});
+
+authRouter.post("/folder", async (req, res, next) => {
+  try {
+    const { folder } = req.body;
+    const date = formatDate();
+    await insertIntoFolders(folder, date);
+    res.end();
+  } catch (error) {
+    next(error);
+  }
 });
 
 authRouter.post("/login", async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await getUserByEmail(email);
-    if (!user) return res.status(400).json({ message: "incorrect email" });
+    const { username, password } = req.body;
+    const user = await getUserByUsername(username);
+    if (!user) return res.status(400).json({ message: "incorrect username" });
 
     // check if password is correct
     if (!(await bcrypt.compare(password, user.password)))
@@ -48,6 +78,7 @@ authRouter.post("/login", async (req, res, next) => {
       jwtSecret,
       { expiresIn: "30d" }
     );
+
     res.cookie("token", accessToken, { httpOnly: true });
 
     // returning authenticated user
@@ -59,9 +90,9 @@ authRouter.post("/login", async (req, res, next) => {
 
 authRouter.post("/register", async (req, res, next) => {
   try {
-    const { fullname, email, password1 } = req.body;
+    const { username, password1 } = req.body;
     const hashedPassword = await bcrypt.hash(password1, 10);
-    await insertIntoUsers(fullname, email, hashedPassword);
+    await insertIntoUsers(username, hashedPassword);
     res.end();
   } catch (error) {
     console.error(error);

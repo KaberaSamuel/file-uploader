@@ -7,16 +7,18 @@ import App from "./App.jsx";
 import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
 import Dashboard from "./components/Dashboard.jsx";
-import InternalErrorPage from "./components/InternalError.jsx";
+import ErrorPage from "./components/ErrorPage.jsx";
 import "./styles/index.css";
 
 const router = createBrowserRouter([
   {
-    path: "/dashboard",
+    path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
+        path: "",
         element: <Dashboard />,
       },
     ],
@@ -25,16 +27,13 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    errorElement: <ErrorPage />,
   },
 
   {
     path: "/signup",
     element: <SignUp />,
-  },
-
-  {
-    path: "/internal-server-error",
-    element: <InternalErrorPage />,
+    errorElement: <ErrorPage />,
   },
 ]);
 

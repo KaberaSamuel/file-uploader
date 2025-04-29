@@ -2,38 +2,46 @@ import { createContext, useEffect, useState, useContext } from "react";
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+async function fetchUserData() {
+  try {
+    const response = await fetch("http://localhost:3000/auth/dashboard", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await fetch("http://localhost:3000/api/dashboard", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          setAuthenticatedUser(null);
-          return;
-        }
-
-        const { user } = await response.json();
-        setAuthenticatedUser(user);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-        setAuthenticatedUser(null);
-      }
+    if (!response.ok) {
+      const { message } = await response.json();
+      console.log(message);
+      return null;
     }
 
-    fetchUser();
+    const { user } = await response.json();
+    return user;
+  } catch {
+    return null;
+  }
+}
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
+  useEffect(() => {
+    (async function () {
+      // lazily loading data for better user experience
+      setTimeout(async () => {
+        const newUser = await fetchUserData();
+        setUser(newUser);
+        setIsLoadingData(false);
+      }, 1000);
+    })();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ authenticatedUser, setAuthenticatedUser }}>
+    <AuthContext.Provider value={{ user, setUser, isLoadingData }}>
       {children}
     </AuthContext.Provider>
   );

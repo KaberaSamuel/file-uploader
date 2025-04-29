@@ -1,73 +1,66 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
+import { PublicNavbar } from "./navbars.jsx";
 import "../styles/forms.css";
+import { useAuth } from "./AuthProvider.jsx";
 
 function Login() {
   const [formFields, setFormFields] = useState({
-    email: "",
+    username: "",
     password: "",
   });
+  const { username, password } = formFields;
 
   const [seePassword, setSeePassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
   const navigate = useNavigate();
+  const { setUser, user } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(formFields),
-      });
+    const response = await fetch("http://localhost:3000/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(formFields),
+    });
 
-      if (!response.ok) {
-        const { message } = await response.json();
-        setErrorMessage(message);
-      } else {
-        navigate("/dashboard");
-      }
-    } catch (error) {
-      console.error(error);
-      navigate("/internal-server-error");
+    if (!response.ok) {
+      const { message } = await response.json();
+      setErrorMessage(message);
+    } else {
+      const { user } = await response.json();
+      setUser(user);
+      navigate("/");
     }
   }
 
-  const { email, password } = formFields;
+  if (user) return <Navigate to="/" />;
 
   return (
     <div>
-      <nav>
-        <div>
-          <Link to="/dashboard">File Uploader</Link>
-        </div>
-
-        <div>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      </nav>
+      <PublicNavbar />
 
       <main className="form-container login">
-        <h1>Login</h1>
+        <h1>Login </h1>
         <p>
           Don't have an account yet ? <Link to="/signup">Sign Up</Link>
         </p>
         <form onSubmit={handleSubmit}>
           <div>
-            <label> Email* </label>
+            <label> Username* </label>
             <input
               type="email"
-              name="email"
-              value={email}
+              name="username"
+              value={username}
               onChange={(e) => {
                 setFormFields({
                   ...formFields,
-                  [e.target.name]: e.target.value,
+                  username: e.target.value,
                 });
               }}
               placeholder="Your email"
@@ -83,7 +76,7 @@ function Login() {
               onChange={(e) => {
                 setFormFields({
                   ...formFields,
-                  [e.target.name]: e.target.value,
+                  password: e.target.value,
                 });
               }}
               placeholder="Your password"

@@ -47,4 +47,5 @@ form {
 form .error-message {
   color: rgb(255, 70, 70);
   font-size: var(--sfs);
+  text-transform: capitalize;
 }

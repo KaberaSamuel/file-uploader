@@ -1,1 +1,126 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  color: var(--lightwhite);
+}
 
+.dashboard {
+  width: 100%;
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  text-align: left;
+}
+
+.sidebar {
+  padding: 15px;
+  border-right: 1px solid var(--darkgray);
+  height: 100%;
+}
+
+.sidebar .links div,
+.sidebar .workspace div {
+  padding: 7px 15px;
+  color: var(--lightwhite);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar .links div {
+  border: 1px solid gray;
+  border-radius: 5px;
+  margin-bottom: 7px;
+}
+
+.sidebar .workspace {
+  margin-top: 20px;
+}
+
+.sidebar .workspace .user {
+  align-items: center;
+  padding: 8px 12px;
+  width: fit-content;
+  min-width: 100%;
+  background-color: var(--darkgray);
+  font-size: 0.8rem;
+  border-left: 3px solid var(--lightblue);
+}
+
+.sidebar .workspace .icon {
+  transform: rotate(0deg);
+  transition: transform ease 0.2s;
+  font-size: var(--fs);
+}
+
+.sidebar .workspace.reveal .icon {
+  transform: rotate(90deg);
+}
+
+.main {
+  padding: 20px;
+}
+
+.main ul {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.main li {
+  display: grid;
+  grid-template-columns: 50% 25% 25%;
+  padding: 5px 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+
+.main li.header {
+  font-weight: 600;
+  color: white;
+  text-transform: capitalize;
+  border: none;
+}
+
+dialog {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: left top;
+  width: 40vw;
+  padding: 20px;
+  background-color: var(--darkgray);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  scale: 0;
+  opacity: 0;
+  border: none;
+  color: white;
+  transition: scale 0.3s, opacity 0.3s;
+}
+
+dialog .first {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+}
+
+dialog .first .icon {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+dialog button {
+  align-self: flex-end;
+}
+
+dialog.reveal {
+  scale: 1;
+  opacity: 1;
+}
