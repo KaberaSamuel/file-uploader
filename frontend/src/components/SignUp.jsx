@@ -1,32 +1,22 @@
-import { Form, Link } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { PublicNavbar } from "./navbars.jsx";
+import { useAuth } from "./AuthProvider.jsx";
 import "../styles/forms.css";
 
 function SignUp() {
+  const navigate = useNavigate();
   const [formFields, setFormFields] = useState({
-    fullname: "",
-    email: "",
+    username: "",
     password1: "",
     password2: "",
   });
 
-  const { fullname, email, password1, password2 } = formFields;
+  const { username, password1, password2 } = formFields;
   const [seePassword, setSeePassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    if (password1 === password2) {
-      await fetch("http://localhost:3000/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formFields),
-      });
-      window.location = "/login";
-    } else {
-      alert("passwords don't match");
-    }
-  }
+  const { user } = useAuth();
 
   // useEffect to checkpasswords
   useEffect(() => {
@@ -41,18 +31,26 @@ function SignUp() {
     checkPasswords();
   }, [password1, password2]);
 
+  // redirecting user if already authenticated
+  if (user) return <Navigate to="/" />;
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (password1 === password2) {
+      await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formFields),
+      });
+      navigate("/login");
+    } else {
+      alert("passwords don't match");
+    }
+  }
+
   return (
     <div>
-      <nav>
-        <div>
-          <Link to="/dashboard">File Uploader</Link>
-        </div>
-
-        <div>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      </nav>
+      <PublicNavbar />
 
       <main className="form-container">
         <h1>Sign Up</h1>
@@ -61,32 +59,15 @@ function SignUp() {
         </p>
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Full Name*</label>
-            <input
-              type="text"
-              placeholder="jackToph456"
-              name="fullname"
-              value={fullname}
-              onChange={(e) => {
-                setFormFields({
-                  ...formFields,
-                  [e.target.name]: e.target.value,
-                });
-              }}
-              required
-            />
-          </div>
-
-          <div>
-            <label> Email* </label>
+            <label> Username* </label>
             <input
               type="email"
-              name="email"
-              value={email}
+              name="username"
+              value={username}
               onChange={(e) => {
                 setFormFields({
                   ...formFields,
-                  [e.target.name]: e.target.value,
+                  username: e.target.value,
                 });
               }}
               placeholder="jackToph456@gmail.com"
@@ -103,7 +84,7 @@ function SignUp() {
               onChange={(e) => {
                 setFormFields({
                   ...formFields,
-                  [e.target.name]: e.target.value,
+                  password1: e.target.value,
                 });
               }}
               placeholder="12345678"
@@ -121,7 +102,7 @@ function SignUp() {
               onChange={(e) => {
                 setFormFields({
                   ...formFields,
-                  [e.target.name]: e.target.value,
+                  password2: e.target.value,
                 });
               }}
               placeholder="12345678"

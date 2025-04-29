@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import authRouter from "./authRouter.js";
+import authRouter from "./routers/authRouter.js";
+import storageRouter from "./routers/storageRouter.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -15,7 +16,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api/", authRouter);
+app.use("/auth", authRouter);
+app.use("/storage", storageRouter);
 
 // error handler middleware
 app.use((err, req, res, next) => {

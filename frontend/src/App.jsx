@@ -1,15 +1,24 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./components/AuthProvider.jsx";
+import Loader from "./components/Loader.jsx";
+import { DashboardNavbar } from "./components/navbars.jsx";
+import "./styles/App.css";
 
 function App() {
-  const { authenticatedUser } = useAuth();
-  console.log("from app.jsx: ", authenticatedUser);
+  const { user, isLoadingData } = useAuth();
 
-  if (!authenticatedUser) {
+  if (isLoadingData) {
+    return <Loader />;
+  } else if (user) {
+    return (
+      <div className="app">
+        <DashboardNavbar />
+        <Outlet context={user} />
+      </div>
+    );
+  } else {
     return <Navigate to="/login" />;
   }
-
-  return <Outlet />;
 }
 
 export default App;

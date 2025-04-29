@@ -3,9 +3,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 
-import "./config/passportConfig.js";
-import { insertIntoUsers, getUserByEmail, getUserById } from "./db.js";
-import { jwtSecret } from "./config/envConfig.js";
+import "../config/passportConfig.js";
+import { insertIntoUsers, getUserByUsername, getUserById } from "../db.js";
+import { jwtSecret } from "../config/envConfig.js";
 
 const authRouter = Router();
 const { sign, verify } = jwt;
@@ -32,9 +32,9 @@ authRouter.get("/dashboard", authenticateToken, (req, res) => {
 
 authRouter.post("/login", async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    const user = await getUserByEmail(email);
-    if (!user) return res.status(400).json({ message: "incorrect email" });
+    const { username, password } = req.body;
+    const user = await getUserByUsername(username);
+    if (!user) return res.status(400).json({ message: "incorrect username" });
 
     // check if password is correct
     if (!(await bcrypt.compare(password, user.password)))
@@ -48,6 +48,7 @@ authRouter.post("/login", async (req, res, next) => {
       jwtSecret,
       { expiresIn: "30d" }
     );
+
     res.cookie("token", accessToken, { httpOnly: true });
 
     // returning authenticated user
@@ -59,9 +60,9 @@ authRouter.post("/login", async (req, res, next) => {
 
 authRouter.post("/register", async (req, res, next) => {
   try {
-    const { fullname, email, password1 } = req.body;
+    const { username, password1 } = req.body;
     const hashedPassword = await bcrypt.hash(password1, 10);
-    await insertIntoUsers(fullname, email, hashedPassword);
+    await insertIntoUsers(username, hashedPassword);
     res.end();
   } catch (error) {
     console.error(error);
