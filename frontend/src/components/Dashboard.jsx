@@ -7,6 +7,34 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useOutletContext, Outlet } from "react-router-dom";
 import { useState } from "react";
+import { apiUrl } from "../../service";
+
+function Items({ folders }) {
+  if (folders.length > 0) {
+    return (
+      <ul>
+        <li className="header">
+          <p>name</p>
+          <p>size</p>
+          <p>created</p>
+        </li>
+        {folders.map(({ id, name, date }) => (
+          <li key={id}>
+            <p>{name}</p>
+            <p>--</p>
+            <p>{date}</p>
+          </li>
+        ))}
+      </ul>
+    );
+  } else {
+    return (
+      <div className="no-items">
+        <p>No items yet</p>
+      </div>
+    );
+  }
+}
 
 function SideBar({ user, setRevealFolderDialog }) {
   const [revealWorkspace, setRevealWorkspace] = useState(false);
@@ -44,42 +72,25 @@ function SideBar({ user, setRevealFolderDialog }) {
 
 function Main({ user }) {
   const { folders } = user;
-
   return (
     <div className="main">
       <p>{user.username}</p>
-
-      {
-        <ul>
-          <li className="header">
-            <p>name</p>
-            <p>size</p>
-            <p>created</p>
-          </li>
-          {folders.map(({ id, name, date }) => (
-            <li key={id}>
-              <p>{name}</p>
-              <p>--</p>
-              <p>{date}</p>
-            </li>
-          ))}
-        </ul>
-      }
+      <Items folders={folders} />
     </div>
   );
 }
 
-function NewFolderDialog({ revealFolderDialog, setRevealFolderDialog }) {
+function NewFolderDialog({ revealFolderDialog, setRevealFolderDialog, user }) {
   const [folder, setfolder] = useState("");
 
   async function submitFolder() {
     if (folder == "") {
       alert("the field is empty");
     } else {
-      const response = await fetch("http://localhost:3000/auth/folder", {
+      const response = await fetch(`${apiUrl}/folders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ folder }),
+        body: JSON.stringify({ folder: folder, id: user.id }),
       });
       setfolder("");
       if (response.ok) {
@@ -128,6 +139,7 @@ function Dashboard() {
       <NewFolderDialog
         revealFolderDialog={revealFolderDialog}
         setRevealFolderDialog={setRevealFolderDialog}
+        user={user}
       />
     </div>
   );

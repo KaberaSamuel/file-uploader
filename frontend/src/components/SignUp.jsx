@@ -2,6 +2,7 @@ import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { PublicNavbar } from "./navbars.jsx";
 import { useAuth } from "./AuthProvider.jsx";
+import { apiUrl } from "../../service.js";
 import "../styles/forms.css";
 
 function SignUp() {
@@ -37,7 +38,7 @@ function SignUp() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (password1 === password2) {
-      await fetch("http://localhost:3000/auth/register", {
+      await fetch(`${apiUrl}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formFields),

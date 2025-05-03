@@ -1,22 +1,10 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-const host = process.env.HOST;
-const dbUser = process.env.USER;
-const database = process.env.DATABASE;
-const password = process.env.PASSWORD;
-const port = process.env.PORT;
 const nodeEnv = process.env.NODE_ENV;
 const jwtSecret = process.env.JWT_SECRET;
 const sessionSecret = process.env.SESSION_SECRET;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
 
-export {
-  host,
-  dbUser,
-  database,
-  password,
-  port,
-  nodeEnv,
-  jwtSecret,
-  sessionSecret,
-};
+export { nodeEnv, jwtSecret, sessionSecret, supabaseUrl, supabaseKey };

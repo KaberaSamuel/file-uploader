@@ -3,6 +3,7 @@ import { Link, useNavigate, Navigate } from "react-router-dom";
 import { PublicNavbar } from "./navbars.jsx";
 import "../styles/forms.css";
 import { useAuth } from "./AuthProvider.jsx";
+import { apiUrl } from "../../service.js";
 
 function Login() {
   const [formFields, setFormFields] = useState({
@@ -20,7 +21,7 @@ function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3000/auth/login", {
+    const response = await fetch(`${apiUrl}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,6 +29,8 @@ function Login() {
       credentials: "include",
       body: JSON.stringify(formFields),
     });
+
+    // console.log("login response: ", response);
 
     if (!response.ok) {
       const { message } = await response.json();

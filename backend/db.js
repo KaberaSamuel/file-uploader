@@ -1,81 +1,60 @@
-import pg from "pg";
-
-import { host, dbUser, database, password, port } from "./config/envConfig.js";
-
-const { Pool } = pg;
-
-const pool = new Pool({
-  host: host,
-  user: dbUser,
-  database: database,
-  password: password,
-  port: port,
-});
-
-async function createTableUsers() {
-  await pool.query(`
-      CREATE TABLE users (
-          id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-          username VARCHAR(255),
-          password VARCHAR(255)
-
-      );
-  `);
-}
-
-async function createTableFolders() {
-  await pool.query(`
-      CREATE TABLE folders (
-          id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-          name VARCHAR(255),
-          date VARCHAR(255)
-      );
-  `);
-}
-
-async function createTableFiles() {
-  await pool.query(`
-      CREATE TABLE files (
-          id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-          name VARCHAR(255),
-          type VARCHAR(255),
-          size VARCHAR(255),
-          date INT
-      );
-  `);
-}
+import { supabaseKey, supabaseUrl } from "./config/envConfig.js";
+import { createClient } from "@supabase/supabase-js";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function insertIntoUsers(username, password) {
-  await pool.query("INSERT INTO users ( username, password)VALUES ($1, $2)", [
-    username,
-    password,
-  ]);
+  const { data, error } = await supabase
+    .from("users")
+    .insert({ username: username, password: password });
+
+  if (error) {
+    console.log(error);
+    return null;
+  }
+  return data;
 }
 
-async function insertIntoFolders(folderName, time) {
-  await pool.query("INSERT INTO folders ( name, date)VALUES ($1, $2)", [
-    folderName,
-    time,
-  ]);
+async function insertIntoFolders(folderName, date, userID) {
+  const { error, data } = await supabase
+    .from("folders")
+    .insert({ name: folderName, date: date, owner_id: userID });
+
+  if (error) {
+    console.log(error);
+    return null;
+  }
+
+  return data;
 }
 
 async function getUserById(id) {
-  const { rows } = await pool.query(`SELECT * FROM users WHERE id='${id}';`);
-  return rows[0];
+  const { data } = await supabase.from("users").select("*").eq("id", id);
+  const user = data[0];
+  return user;
 }
 
 async function getUserByUsername(username) {
-  const { rows } = await pool.query(
-    `SELECT * FROM users WHERE username='${username}';`
-  );
+  const { data } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", username);
 
-  return rows[0];
+  return data[0];
 }
 
-async function getFolders() {
-  const { rows } = await pool.query(`SELECT * FROM folders;`);
+async function getAllUsers() {
+  const { data } = await supabase.from("users").select("*");
 
-  return rows;
+  return data;
+}
+
+async function getFolders(userID) {
+  const { data } = await supabase
+    .from("folders")
+    .select("*")
+    .eq("owner_id", userID);
+
+  return data;
 }
 
 export {
@@ -84,4 +63,5 @@ export {
   getUserByUsername,
   getUserById,
   getFolders,
+  getAllUsers,
 };
