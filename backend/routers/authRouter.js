@@ -1,7 +1,6 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import cookieParser from "cookie-parser";
 
 import "../config/passportConfig.js";
 import {
@@ -27,7 +26,7 @@ function formatDate() {
   return date;
 }
 
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
   try {
     const token = req.cookies.token;
     if (token == null) return res.status(400).json({ message: "no token" });
@@ -35,7 +34,9 @@ function authenticateToken(req, res, next) {
     verify(token, jwtSecret, async (err, payload) => {
       if (err) return res.status(401).json({ message: "invalid token" });
       const user = await getUserById(payload.id);
+
       req.user = user;
+
       next();
     });
   } catch (error) {
@@ -45,15 +46,15 @@ function authenticateToken(req, res, next) {
 
 authRouter.get("/dashboard", authenticateToken, async (req, res) => {
   const user = req.user;
-  user.folders = await getFolders();
+  user.folders = await getFolders(user.id);
   res.status(200).json({ user });
 });
 
-authRouter.post("/folder", async (req, res, next) => {
+authRouter.post("/folders", async (req, res, next) => {
   try {
-    const { folder } = req.body;
+    const { folder, id } = req.body;
     const date = formatDate();
-    await insertIntoFolders(folder, date);
+    await insertIntoFolders(folder, date, id);
     res.end();
   } catch (error) {
     next(error);
@@ -64,6 +65,7 @@ authRouter.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
     const user = await getUserByUsername(username);
+
     if (!user) return res.status(400).json({ message: "incorrect username" });
 
     // check if password is correct
@@ -76,12 +78,16 @@ authRouter.post("/login", async (req, res, next) => {
         id: user.id,
       },
       jwtSecret,
-      { expiresIn: "30d" }
+      { expiresIn: "7d" }
     );
 
-    res.cookie("token", accessToken, { httpOnly: true });
+    res.cookie("token", accessToken, {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+    });
 
-    // returning authenticated user
+    user.folders = await getFolders(user.id);
     return res.json({ user });
   } catch (error) {
     next(error);

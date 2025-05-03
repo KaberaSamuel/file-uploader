@@ -1,31 +1,9 @@
 import { createContext, useEffect, useState, useContext } from "react";
+import { fetchUserData } from "../../service";
 
 const AuthContext = createContext();
 
-async function fetchUserData() {
-  try {
-    const response = await fetch("http://localhost:3000/auth/dashboard", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      const { message } = await response.json();
-      console.log(message);
-      return null;
-    }
-
-    const { user } = await response.json();
-    return user;
-  } catch {
-    return null;
-  }
-}
-
-export function AuthProvider({ children }) {
+function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoadingData, setIsLoadingData] = useState(true);
 

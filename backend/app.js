@@ -2,20 +2,29 @@ import express from "express";
 import cors from "cors";
 import authRouter from "./routers/authRouter.js";
 import cookieParser from "cookie-parser";
+import { nodeEnv } from "./config/envConfig.js";
+import { apiUrl } from "../frontend/service.js";
 
 const app = express();
 
+let frontendURL = "https://file-uploader-frontend-m9a9.onrender.com";
+
+if (nodeEnv == "development") {
+  frontendURL = "http://localhost:5173/";
+}
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: apiUrl,
     credentials: true,
   })
 );
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/auth", authRouter);
+app.use("/", authRouter);
 
 // error handler middleware
 app.use((err, req, res, next) => {

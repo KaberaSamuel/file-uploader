@@ -2,13 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import { apiUrl } from "../../service.js";
 
 function DashboardNavbar() {
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
   async function logout() {
-    const response = await fetch("http://localhost:3000/api/logout", {
+    const response = await fetch(`${apiUrl}/logout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
