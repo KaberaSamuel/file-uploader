@@ -32,7 +32,7 @@ function SignUp() {
     checkPasswords();
   }, [password1, password2]);
 
-  // redirecting user if already authenticated
+  // redirecting user to the homepage if already authenticated
   if (user) return <Navigate to="/" />;
 
   async function handleSubmit(e) {

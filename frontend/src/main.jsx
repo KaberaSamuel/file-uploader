@@ -7,34 +7,27 @@ import App from "./App.jsx";
 import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
 import Dashboard from "./components/Dashboard.jsx";
-import ErrorPage from "./components/ErrorPage.jsx";
+import NotFoundPage from "./components/notFound.jsx";
 import "./styles/index.css";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        path: "",
-        element: <Dashboard />,
-      },
-    ],
   },
-
+  {
+    path: "/folders",
+    element: <Dashboard />,
+  },
   {
     path: "/login",
     element: <Login />,
-    errorElement: <ErrorPage />,
   },
-
   {
     path: "/signup",
     element: <SignUp />,
-    errorElement: <ErrorPage />,
   },
+  { path: "*", element: <NotFoundPage /> },
 ]);
 
 createRoot(document.getElementById("root")).render(

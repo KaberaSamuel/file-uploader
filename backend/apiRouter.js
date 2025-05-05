@@ -2,17 +2,17 @@ import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-import "../config/passportConfig.js";
+import "./config/passportConfig.js";
 import {
   insertIntoUsers,
   insertIntoFolders,
   getUserByUsername,
   getUserById,
   getFolders,
-} from "../db.js";
-import { jwtSecret } from "../config/envConfig.js";
+} from "./db.js";
+import { jwtSecret } from "./config/envConfig.js";
 
-const authRouter = Router();
+const api = Router();
 const { sign, verify } = jwt;
 
 function formatDate() {
@@ -44,13 +44,13 @@ async function authenticateToken(req, res, next) {
   }
 }
 
-authRouter.get("/dashboard", authenticateToken, async (req, res) => {
+api.get("/folders", authenticateToken, async (req, res) => {
   const user = req.user;
-  user.folders = await getFolders(user.id);
+
   res.status(200).json({ user });
 });
 
-authRouter.post("/folders", async (req, res, next) => {
+api.post("/folders", async (req, res, next) => {
   try {
     const { folder, id } = req.body;
     const date = formatDate();
@@ -61,7 +61,7 @@ authRouter.post("/folders", async (req, res, next) => {
   }
 });
 
-authRouter.post("/login", async (req, res, next) => {
+api.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
     const user = await getUserByUsername(username);
@@ -94,7 +94,7 @@ authRouter.post("/login", async (req, res, next) => {
   }
 });
 
-authRouter.post("/register", async (req, res, next) => {
+api.post("/register", async (req, res, next) => {
   try {
     const { username, password1 } = req.body;
     const hashedPassword = await bcrypt.hash(password1, 10);
@@ -106,7 +106,7 @@ authRouter.post("/register", async (req, res, next) => {
   }
 });
 
-authRouter.get("/logout", (req, res, next) => {
+api.get("/logout", (req, res, next) => {
   try {
     // Clearing JWT cookie
     res.cookie("token", null);
@@ -116,4 +116,4 @@ authRouter.get("/logout", (req, res, next) => {
   }
 });
 
-export default authRouter;
+export default api;

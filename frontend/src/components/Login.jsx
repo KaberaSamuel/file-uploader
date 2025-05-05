@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { PublicNavbar } from "./navbars.jsx";
 import "../styles/forms.css";
+import Loader from "./Loader.jsx";
 import { useAuth } from "./AuthProvider.jsx";
 import { apiUrl } from "../../service.js";
 
@@ -16,7 +17,7 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const navigate = useNavigate();
-  const { setUser, user } = useAuth();
+  const { setUser, user, isLoading, setIsLoading } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -30,19 +31,29 @@ function Login() {
       body: JSON.stringify(formFields),
     });
 
-    // console.log("login response: ", response);
-
     if (!response.ok) {
       const { message } = await response.json();
       setErrorMessage(message);
     } else {
       const { user } = await response.json();
       setUser(user);
-      navigate("/");
+
+      // showing a loading screen when redirecting the user
+      setIsLoading(true);
+      navigate("/").then(
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 500)
+      );
     }
   }
 
-  if (user) return <Navigate to="/" />;
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  // redirecting the user to the homepage if already authenticated
+  if (user) return <Navigate to="/folders" />;
 
   return (
     <div>

@@ -1,8 +1,9 @@
-const apiUrl = "https://file-uploader-xctw.onrender.com";
+// const apiUrl = "https://file-uploader-xctw.onrender.com";
+const apiUrl = "http://localhost:3000";
 
 async function fetchUserData() {
   try {
-    const response = await fetch(`${apiUrl}/dashboard`, {
+    const response = await fetch(`${apiUrl}/folders`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

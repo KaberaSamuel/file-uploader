@@ -25,7 +25,7 @@ function DashboardNavbar() {
 
   return (
     <nav>
-      <Link to="/">File Uploader</Link>
+      <Link to="/folders">File Uploader</Link>
       <div onClick={logout}>
         <FontAwesomeIcon className="icon" icon={faArrowRightFromBracket} />
       </div>
@@ -37,7 +37,7 @@ function PublicNavbar() {
   return (
     <nav>
       <div>
-        <Link to="/">File Uploader</Link>
+        <Link to="/folders">File Uploader</Link>
       </div>
 
       <div>
