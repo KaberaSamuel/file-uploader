@@ -8,6 +8,7 @@ import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import NotFoundPage from "./components/notFound.jsx";
+import { getUserFoldersTree } from "../service.js";
 import "./styles/index.css";
 
 const router = createBrowserRouter([
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
   {
     path: "/folders",
     element: <Dashboard />,
+    loader: getUserFoldersTree,
   },
   {
     path: "/login",

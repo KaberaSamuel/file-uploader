@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth } from "./components/AuthProvider.jsx";
 import Loader from "./components/Loader.jsx";
 import "./styles/App.css";

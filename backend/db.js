@@ -5,7 +5,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 async function insertIntoUsers(username, password) {
   const { data, error } = await supabase
     .from("users")
-    .insert({ username: username, password: password });
+    .insert({ name: username, password: password });
 
   if (error) {
     console.log(error);
@@ -37,14 +37,13 @@ async function getUserByUsername(username) {
   const { data } = await supabase
     .from("users")
     .select("*")
-    .eq("username", username);
+    .eq("name", username);
 
   return data[0];
 }
 
 async function getAllUsers() {
   const { data } = await supabase.from("users").select("*");
-
   return data;
 }
 

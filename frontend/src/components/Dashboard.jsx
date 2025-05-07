@@ -1,20 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faFolderPlus,
   faFolderClosed,
-  faFileCirclePlus,
-  faChevronRight,
   faXmark,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useLoaderData } from "react-router-dom";
 import { useState } from "react";
 import { apiUrl } from "../../service";
 import { DashboardNavbar } from "./navbars.jsx";
+import SideBar from "./Sidebar.jsx";
 import { useAuth } from "./AuthProvider.jsx";
+import Loader from "./Loader.jsx";
 import "../styles/App.css";
 
 function Items({ folders }) {
-  if (folders.length > 0) {
+  if (folders && folders.length > 0) {
     return (
       <ul>
         <li className="header">
@@ -43,48 +43,27 @@ function Items({ folders }) {
   }
 }
 
-function SideBar({ user, setRevealFolderDialog }) {
-  const [revealWorkspace, setRevealWorkspace] = useState(false);
+function FolderContent({ foldersTree, pathArray }) {
+  const user = foldersTree[0];
+  const { children } = user;
+  const max = pathArray.length - 1;
   return (
-    <div className="sidebar">
-      <div className="links">
-        <div
-          onClick={() => {
-            setRevealFolderDialog(true);
-          }}
-        >
-          <FontAwesomeIcon className="icon" icon={faFolderPlus} />
-          <p>New Folder</p>
-        </div>
-
-        <div>
-          <FontAwesomeIcon className="icon" icon={faFileCirclePlus} />
-          <p>New File</p>
-        </div>
+    <div className="folder-content">
+      <div className="path-bar">
+        {pathArray.map(({ name, id }, index) => {
+          if (index < max) {
+            return (
+              <div key={id}>
+                <p>{name}</p>
+                <FontAwesomeIcon className="icon" icon={faChevronRight} />
+              </div>
+            );
+          } else {
+            return <p key={id}>{name}</p>;
+          }
+        })}
       </div>
-
-      <div
-        className={revealWorkspace ? "workspace reveal" : "workspace"}
-        onClick={() => {
-          setRevealWorkspace(!revealWorkspace);
-        }}
-      >
-        <div className="user">
-          <FontAwesomeIcon className="icon" icon={faChevronRight} />
-          <p>{user.username}</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Main({ user }) {
-  console.log(user);
-  // const { folders } = user;
-  return (
-    <div className="main">
-      <p>{user.username}</p>
-      {/* <Items folders={folders} /> */}
+      <Items folders={children} />
     </div>
   );
 }
@@ -141,18 +120,32 @@ function NewFolderDialog({ revealFolderDialog, setRevealFolderDialog, user }) {
 
 function Dashboard() {
   const { user } = useAuth();
+  const foldersTree = useLoaderData();
+  const navigate = useNavigate();
   const [revealFolderDialog, setRevealFolderDialog] = useState(false);
 
+  // setting user as the first element in the array
+  const [pathArray, setPathArray] = useState([foldersTree[0]]);
+
   if (!user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
+  }
+
+  if (navigate.state == "loading") {
+    return <Loader />;
   }
 
   return (
-    <div className="app">
+    <div>
       <DashboardNavbar />
+
       <div className="dashboard">
-        <SideBar user={user} setRevealFolderDialog={setRevealFolderDialog} />
-        <Main user={user} />
+        <SideBar
+          foldersTree={foldersTree}
+          setRevealFolderDialog={setRevealFolderDialog}
+          setPathArray={setPathArray}
+        />
+        <FolderContent foldersTree={foldersTree} pathArray={pathArray} />
         <NewFolderDialog
           revealFolderDialog={revealFolderDialog}
           setRevealFolderDialog={setRevealFolderDialog}

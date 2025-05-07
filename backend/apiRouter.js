@@ -44,10 +44,15 @@ async function authenticateToken(req, res, next) {
   }
 }
 
-api.get("/folders", authenticateToken, async (req, res) => {
+api.get("/", authenticateToken, async (req, res) => {
   const user = req.user;
-
   res.status(200).json({ user });
+});
+
+api.get("/folders", authenticateToken, async (req, res) => {
+  const folders = await getFolders(req.user.id);
+  const user = req.user;
+  res.json({ folders, user });
 });
 
 api.post("/folders", async (req, res, next) => {
