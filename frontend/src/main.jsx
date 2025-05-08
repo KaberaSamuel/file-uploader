@@ -8,7 +8,8 @@ import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import NotFoundPage from "./components/notFound.jsx";
-import { getUserFoldersTree } from "../service.js";
+import { getUserFoldersTree, folderContentLoader } from "../service.js";
+import FolderItem from "./components/FolderItem.jsx";
 import "./styles/index.css";
 
 const router = createBrowserRouter([
@@ -20,7 +21,15 @@ const router = createBrowserRouter([
     path: "/folders",
     element: <Dashboard />,
     loader: getUserFoldersTree,
+    children: [
+      {
+        path: "/folders/:id",
+        element: <FolderItem />,
+        loader: folderContentLoader,
+      },
+    ],
   },
+
   {
     path: "/login",
     element: <Login />,

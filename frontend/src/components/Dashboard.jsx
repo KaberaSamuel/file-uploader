@@ -1,72 +1,14 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFolderClosed,
-  faXmark,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, Navigate, useLoaderData } from "react-router-dom";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate, Navigate, useLoaderData, Outlet } from "react-router-dom";
 import { useState } from "react";
-import { apiUrl } from "../../service";
+import { apiUrl } from "../../service.js";
 import { DashboardNavbar } from "./navbars.jsx";
-import SideBar from "./Sidebar.jsx";
+import { FolderView } from "./FolderItem.jsx";
 import { useAuth } from "./AuthProvider.jsx";
+import SideBar from "./Sidebar.jsx";
 import Loader from "./Loader.jsx";
 import "../styles/App.css";
-
-function Items({ folders }) {
-  if (folders && folders.length > 0) {
-    return (
-      <ul>
-        <li className="header">
-          <p>name</p>
-          <p>size</p>
-          <p>created</p>
-        </li>
-        {folders.map(({ id, name, date }) => (
-          <li key={id}>
-            <div>
-              <FontAwesomeIcon className="icon" icon={faFolderClosed} />
-              <p>{name}</p>
-            </div>
-            <p>--</p>
-            <p>{date}</p>
-          </li>
-        ))}
-      </ul>
-    );
-  } else {
-    return (
-      <div className="no-items">
-        <p>No items yet</p>
-      </div>
-    );
-  }
-}
-
-function FolderContent({ foldersTree, pathArray }) {
-  const user = foldersTree[0];
-  const { children } = user;
-  const max = pathArray.length - 1;
-  return (
-    <div className="folder-content">
-      <div className="path-bar">
-        {pathArray.map(({ name, id }, index) => {
-          if (index < max) {
-            return (
-              <div key={id}>
-                <p>{name}</p>
-                <FontAwesomeIcon className="icon" icon={faChevronRight} />
-              </div>
-            );
-          } else {
-            return <p key={id}>{name}</p>;
-          }
-        })}
-      </div>
-      <Items folders={children} />
-    </div>
-  );
-}
 
 function NewFolderDialog({ revealFolderDialog, setRevealFolderDialog, user }) {
   const [folder, setfolder] = useState("");
@@ -119,13 +61,13 @@ function NewFolderDialog({ revealFolderDialog, setRevealFolderDialog, user }) {
 }
 
 function Dashboard() {
+  // starting variables
   const { user } = useAuth();
   const foldersTree = useLoaderData();
   const navigate = useNavigate();
-  const [revealFolderDialog, setRevealFolderDialog] = useState(false);
 
-  // setting user as the first element in the array
-  const [pathArray, setPathArray] = useState([foldersTree[0]]);
+  // tracking form dialog for new folder
+  const [revealFolderDialog, setRevealFolderDialog] = useState(false);
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -143,9 +85,10 @@ function Dashboard() {
         <SideBar
           foldersTree={foldersTree}
           setRevealFolderDialog={setRevealFolderDialog}
-          setPathArray={setPathArray}
         />
-        <FolderContent foldersTree={foldersTree} pathArray={pathArray} />
+
+        <Outlet />
+
         <NewFolderDialog
           revealFolderDialog={revealFolderDialog}
           setRevealFolderDialog={setRevealFolderDialog}

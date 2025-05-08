@@ -33,8 +33,8 @@ async function authenticateToken(req, res, next) {
 
     verify(token, jwtSecret, async (err, payload) => {
       if (err) return res.status(401).json({ message: "invalid token" });
-      const user = await getUserById(payload.id);
 
+      const user = await getUserById(payload.id);
       req.user = user;
 
       next();
@@ -53,6 +53,13 @@ api.get("/folders", authenticateToken, async (req, res) => {
   const folders = await getFolders(req.user.id);
   const user = req.user;
   res.json({ folders, user });
+});
+
+api.get("/folders/:id", authenticateToken, async (req, res) => {
+  const { id: folderId } = req.params;
+  const folders = await getFolders(req.user.id, folderId);
+
+  res.json({ folders });
 });
 
 api.post("/folders", async (req, res, next) => {

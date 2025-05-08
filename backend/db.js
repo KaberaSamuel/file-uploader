@@ -47,13 +47,27 @@ async function getAllUsers() {
   return data;
 }
 
-async function getFolders(userID) {
-  const { data } = await supabase
-    .from("folders")
-    .select("*")
-    .eq("owner_id", userID);
+async function getFolders(userID, folderID = null) {
+  let folders;
 
-  return data;
+  if (folderID) {
+    const { data } = await supabase
+      .from("folders")
+      .select("*")
+      .eq("owner_id", userID)
+      .eq("parent_id", folderID);
+
+    folders = data;
+  } else {
+    const { data } = await supabase
+      .from("folders")
+      .select("*")
+      .eq("owner_id", userID);
+
+    folders = data;
+  }
+
+  return folders;
 }
 
 export {

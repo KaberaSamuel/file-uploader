@@ -4,47 +4,12 @@ import {
   faFileCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
+import { useNavigate } from "react-router-dom";
 import "../styles/sidebar.css";
 
-function getFolderById(id, folders) {
-  for (const folder of folders) {
-    if (folder.id === id) {
-      return folder;
-    }
+function SideBar({ foldersTree, setRevealFolderDialog }) {
+  const navigate = useNavigate();
 
-    if (folder.children) {
-      const found = getFolderById(id, folder.children);
-      if (found) {
-        return found;
-      }
-    }
-  }
-
-  return null;
-}
-
-function generatePathArray(currentFolder, foldersTree) {
-  let pathArray = [];
-
-  function buildArray(folder, tree) {
-    pathArray.push(folder);
-
-    if (folder.parent_id) {
-      const newFolder = getFolderById(folder.parent_id, tree);
-      buildArray(newFolder, tree);
-    } else {
-      return;
-    }
-  }
-
-  buildArray(currentFolder, foldersTree);
-
-  // reversing to start with parents
-  pathArray.reverse();
-  return pathArray;
-}
-
-function SideBar({ foldersTree, setRevealFolderDialog, setPathArray }) {
   function getItemLabel(item) {
     return item.name;
   }
@@ -71,15 +36,12 @@ function SideBar({ foldersTree, setRevealFolderDialog, setPathArray }) {
         <RichTreeView
           items={foldersTree}
           getItemLabel={getItemLabel}
-          onItemClick={(e, id) => {
-            const folder = getFolderById(id, foldersTree);
-            const pathArray = generatePathArray(folder, foldersTree);
-            const user = foldersTree[0];
-
-            if (pathArray[0] !== user) {
-              pathArray.unshift(user);
+          onItemClick={async (e, id) => {
+            if (id == 0) {
+              navigate("/folders");
+            } else {
+              navigate(`/folders/${id}`);
             }
-            setPathArray(pathArray);
           }}
         />
       </div>
