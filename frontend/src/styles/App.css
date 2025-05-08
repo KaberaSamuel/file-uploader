@@ -22,7 +22,8 @@
   gap: 4px;
 }
 
-.folder-content li {
+.folder-content li a,
+.folder-content li.header {
   display: grid;
   grid-template-columns: 50% 25% 25%;
   padding: 5px 10px;
@@ -57,8 +58,9 @@
   gap: 12px;
 }
 
-.folder-content .path-bar p {
+.folder-content .path-bar a {
   color: var(--lightblue);
+  font-size: var(--fs);
 }
 
 .folder-content .path-bar .icon {

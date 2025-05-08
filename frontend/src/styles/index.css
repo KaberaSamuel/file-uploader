@@ -12,6 +12,7 @@
   --white: #ffffff;
   --lightwhite: #acacac;
   --lightblue: #2c99ff;
+  --nav-height: 60px;
 }
 
 body {
@@ -39,7 +40,8 @@ ul {
 }
 
 nav {
-  padding: 15px 30px;
+  padding: 20px;
+  height: var(--nav-height);
   display: flex;
   justify-content: space-between;
   align-items: center;

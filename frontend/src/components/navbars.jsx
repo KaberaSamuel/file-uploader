@@ -6,7 +6,7 @@ import { apiUrl } from "../../service.js";
 
 function DashboardNavbar() {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { setDataTree } = useAuth();
 
   async function logout() {
     const response = await fetch(`${apiUrl}/logout`, {
@@ -18,7 +18,7 @@ function DashboardNavbar() {
     });
 
     if (response.status === 200) {
-      setUser(null);
+      setDataTree([null]);
       navigate("/login");
     }
   }

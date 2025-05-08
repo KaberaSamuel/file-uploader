@@ -1,25 +1,26 @@
-import { createContext, useEffect, useState, useContext } from "react";
-import { fetchUserData } from "../../service";
+import { createContext, useState, useEffect, useContext } from "react";
+import { useLoader } from "./LoadingContext";
+import { getDataTree } from "../../service";
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [dataTree, setDataTree] = useState([null]);
+  const { setIsLoading } = useLoader();
 
   useEffect(() => {
     (async function () {
-      // lazily loading data for better user experience
+      // lazily loading dataTree for better user experience
       setTimeout(async () => {
-        const newUser = await fetchUserData();
-        setUser(newUser);
+        const userDataTree = await getDataTree();
+        setDataTree(userDataTree);
         setIsLoading(false);
       }, 1000);
     })();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
+    <AuthContext.Provider value={{ dataTree, setDataTree, setIsLoading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -4,7 +4,8 @@ import { PublicNavbar } from "./navbars.jsx";
 import "../styles/forms.css";
 import Loader from "./Loader.jsx";
 import { useAuth } from "./AuthProvider.jsx";
-import { apiUrl } from "../../service.js";
+import { useLoader } from "./LoadingContext.jsx";
+import { apiUrl, createDataTree } from "../../service.js";
 
 function Login() {
   const [formFields, setFormFields] = useState({
@@ -17,11 +18,15 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const navigate = useNavigate();
-  const { setUser, user, isLoading, setIsLoading } = useAuth();
+  const { dataTree, setDataTree } = useAuth();
+  const { isLoading, setIsLoading } = useLoader();
+  const user = dataTree[0];
 
   async function handleSubmit(e) {
     e.preventDefault();
 
+    // showing loading screen as we fetch data
+    setIsLoading(true);
     const response = await fetch(`${apiUrl}/login`, {
       method: "POST",
       headers: {
@@ -36,11 +41,10 @@ function Login() {
       setErrorMessage(message);
     } else {
       const { user } = await response.json();
-      setUser(user);
+      const dataTree = createDataTree(user);
+      setDataTree(dataTree);
 
-      // showing a loading screen when redirecting the user
-      setIsLoading(true);
-      navigate("/").then(
+      navigate("/folders").then(
         setTimeout(() => {
           setIsLoading(false);
         }, 500)
