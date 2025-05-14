@@ -4,15 +4,13 @@ import {
   faFileCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
-import { useNavigate } from "react-router-dom";
-import { getFolderById } from "../../service";
+// import { useNavigate } from "react-router-dom";
+// import { getFolderById } from "../../service";
+import TreeView from "./TreeView";
 import "../styles/sidebar.css";
 
 function SideBar({ dataTree, setRevealFolderDialog }) {
-  const navigate = useNavigate();
-  function getItemLabel(item) {
-    return item.name;
-  }
+  // const navigate = useNavigate();
 
   return (
     <div className="sidebar">
@@ -32,19 +30,8 @@ function SideBar({ dataTree, setRevealFolderDialog }) {
         </div>
       </div>
 
-      <div className="folders-tree">
-        <RichTreeView
-          items={dataTree}
-          getItemLabel={getItemLabel}
-          onItemClick={async (e, id) => {
-            if (id == 0) {
-              navigate("/folders");
-            } else {
-              const folder = getFolderById(id, dataTree);
-              navigate(`/folders/${folder.id}`);
-            }
-          }}
-        />
+      <div>
+        <TreeView data={dataTree} />
       </div>
     </div>
   );
