@@ -1,16 +1,47 @@
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFolderPlus,
   faFileCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
-// import { useNavigate } from "react-router-dom";
-// import { getFolderById } from "../../service";
-import TreeView from "./TreeView";
+import { getFolderById, getAllFolderIds, getPathArray } from "../../service";
 import "../styles/sidebar.css";
 
 function SideBar({ dataTree, setRevealFolderDialog }) {
-  // const navigate = useNavigate();
+  const { id } = useParams();
+  const folderId = id ? Number(id) : 0;
+
+  const [selectedItems, setSelectedItems] = useState([folderId]);
+  const [expandedItems, setExpandedItems] = useState([]);
+
+  const navigate = useNavigate();
+
+  const folder = getFolderById(folderId, dataTree);
+  const pathArray = getPathArray(folder, dataTree);
+  const expandedItemIds = pathArray.map((folder) => folder.id);
+
+  function getItemLabel(item) {
+    return item.name;
+  }
+
+  // Sync selected and expanded items with current route
+  useEffect(() => {
+    setSelectedItems([folderId]);
+
+    // Only merge valid folders that still exist in the tree
+    const visibleFolderIds = new Set(getAllFolderIds(dataTree)); // helper function below
+
+    const validPathIds = expandedItemIds.filter((id) =>
+      visibleFolderIds.has(id)
+    );
+
+    setExpandedItems((prev) => {
+      const merged = new Set([...prev, ...validPathIds]);
+      return Array.from(merged);
+    });
+  }, [folderId, dataTree]); // add dataTree here too
 
   return (
     <div className="sidebar">
@@ -30,9 +61,23 @@ function SideBar({ dataTree, setRevealFolderDialog }) {
         </div>
       </div>
 
-      <div>
-        <TreeView data={dataTree} />
-      </div>
+      <RichTreeView
+        items={dataTree}
+        selectedItems={selectedItems}
+        onSelectedItemsChange={(event, ids) => setSelectedItems(ids)}
+        expandedItems={expandedItems}
+        onExpandedItemsChange={(event, ids) => setExpandedItems(ids)}
+        getItemLabel={getItemLabel}
+        onItemClick={(e, id) => {
+          if (id === 0) {
+            navigate("/folders");
+          } else {
+            navigate(`/folders/${id}`);
+          }
+        }}
+        className="tree-view"
+        multiSelect={false}
+      />
     </div>
   );
 }

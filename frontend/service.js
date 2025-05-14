@@ -1,6 +1,22 @@
 // const apiUrl = "https://file-uploader-xctw.onrender.com";
 const apiUrl = "http://localhost:3000";
 
+function getAllFolderIds(items) {
+  const ids = [];
+
+  function buildArray(nodes) {
+    for (const node of nodes) {
+      ids.push(node.id);
+      if (node.children) {
+        buildArray(node.children);
+      }
+    }
+  }
+
+  buildArray(items);
+  return ids;
+}
+
 function getPathArray(folder, dataTree) {
   const pathArray = [];
 
@@ -104,4 +120,11 @@ async function getDataTree() {
   }
 }
 
-export { apiUrl, createDataTree, getDataTree, getFolderById, getPathArray };
+export {
+  apiUrl,
+  createDataTree,
+  getDataTree,
+  getFolderById,
+  getPathArray,
+  getAllFolderIds,
+};
