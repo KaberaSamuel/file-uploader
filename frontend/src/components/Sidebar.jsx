@@ -4,13 +4,21 @@ import {
   faFileCirclePlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { RichTreeView } from "@mui/x-tree-view/RichTreeView";
-// import { useNavigate } from "react-router-dom";
-// import { getFolderById } from "../../service";
-import TreeView from "./TreeView";
+import { useNavigate, useParams } from "react-router-dom";
+import { getFolderById, getPathArray } from "../../service";
 import "../styles/sidebar.css";
 
 function SideBar({ dataTree, setRevealFolderDialog }) {
-  // const navigate = useNavigate();
+  const { id } = useParams();
+  const folderId = id ? Number(id) : 0;
+  const folder = getFolderById(folderId, dataTree);
+  const pathArray = getPathArray(folder, dataTree);
+  const expandedItemIds = pathArray.map((folder) => folder.id);
+
+  const navigate = useNavigate();
+  function getItemLabel(item) {
+    return item.name;
+  }
 
   return (
     <div className="sidebar">
@@ -30,9 +38,20 @@ function SideBar({ dataTree, setRevealFolderDialog }) {
         </div>
       </div>
 
-      <div>
-        <TreeView data={dataTree} />
-      </div>
+      <RichTreeView
+        items={dataTree}
+        defaultSelectedItems={[folderId]}
+        defaultExpandedItems={expandedItemIds}
+        getItemLabel={getItemLabel}
+        onItemClick={async (e, id) => {
+          if (id == 0) {
+            navigate("/folders");
+          } else {
+            navigate(`/folders/${id}`);
+          }
+        }}
+        multiSelect
+      />
     </div>
   );
 }

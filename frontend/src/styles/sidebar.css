@@ -21,23 +21,3 @@
   border-radius: 5px;
   margin-bottom: 5px;
 }
-
-.tree-view {
-  font-size: 1.1rem;
-}
-
-.tree-view .tree-node .node {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  margin: 3px 0;
-}
-
-.tree-view .tree-node .children {
-  padding-left: 15px;
-}
-
-.tree-view .icon {
-  margin-right: 3px;
-  font-size: 0.9rem;
-}
