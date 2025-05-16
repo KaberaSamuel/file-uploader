@@ -14,16 +14,19 @@ async function insertIntoUsers(username, password) {
   return data;
 }
 
-async function insertIntoFolders(folderName, date, userID) {
-  const { error, data } = await supabase
-    .from("folders")
-    .insert({ name: folderName, date: date, owner_id: userID });
+async function insertIntoFolders(folder) {
+  const { folderName, date, userId, parentId } = folder;
+  const { error, data } = await supabase.from("folders").insert({
+    name: folderName,
+    date: date,
+    owner_id: userId,
+    parent_id: parentId,
+  });
 
   if (error) {
     console.log(error);
     return null;
   }
-
   return data;
 }
 
@@ -47,14 +50,14 @@ async function getAllUsers() {
   return data;
 }
 
-async function getFolders(userID, folderID = null) {
+async function getFolders(userId, folderID = null) {
   let folders;
 
   if (folderID) {
     const { data } = await supabase
       .from("folders")
       .select("*")
-      .eq("owner_id", userID)
+      .eq("owner_id", userId)
       .eq("parent_id", folderID);
 
     folders = data;
@@ -62,7 +65,7 @@ async function getFolders(userID, folderID = null) {
     const { data } = await supabase
       .from("folders")
       .select("*")
-      .eq("owner_id", userID);
+      .eq("owner_id", userId);
 
     folders = data;
   }

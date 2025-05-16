@@ -1,5 +1,7 @@
 .app {
+  position: relative;
   min-height: 100vh;
+  background-color: black;
 }
 
 .dashboard {
@@ -67,8 +69,8 @@
   transform: translateY(3px);
 }
 
-.folder-content .path-bar .icon dialog {
-  position: absolute;
+dialog {
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -76,15 +78,21 @@
   width: 40vw;
   padding: 20px;
   background-color: var(--darkgray);
-  border-radius: 5px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  scale: 0;
-  opacity: 0;
-  border: none;
+  gap: 15px;
+  scale: 0.5;
+  opacity: 0.5;
+  z-index: -100;
+  border: 2px solid white;
+  border-radius: 20px;
   color: white;
-  transition: scale 0.3s, opacity 0.3s;
+  transition: all 0.3s;
+}
+
+dialog form {
+  width: 100%;
+  /* border: 2px solid red; */
 }
 
 dialog .first {
@@ -105,4 +113,5 @@ dialog button {
 dialog.reveal {
   scale: 1;
   opacity: 1;
+  z-index: 100;
 }

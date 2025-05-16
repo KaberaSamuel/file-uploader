@@ -54,7 +54,7 @@ function getFolderById(id, dataTree) {
 
 // function to create data tree from user object
 function createDataTree(user) {
-  const { name: username, folders } = user;
+  const { name: username, folders, id } = user;
 
   // reversing the folder to start with the lates folders
   folders.reverse();
@@ -89,6 +89,7 @@ function createDataTree(user) {
       id: 0,
       parent_id: null,
       children: foldersTree,
+      userId: id,
     },
   ];
 

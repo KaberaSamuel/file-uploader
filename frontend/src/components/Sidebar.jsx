@@ -9,7 +9,7 @@ import {
 import { getFolderById, getAllFolderIds, getPathArray } from "../../service";
 import "../styles/sidebar.css";
 
-function SideBar({ dataTree, setRevealFolderDialog }) {
+function SideBar({ dataTree, setDialog }) {
   const { id } = useParams();
   const folderId = id ? Number(id) : 0;
 
@@ -31,7 +31,7 @@ function SideBar({ dataTree, setRevealFolderDialog }) {
     setSelectedItems([folderId]);
 
     // Only merge valid folders that still exist in the tree
-    const visibleFolderIds = new Set(getAllFolderIds(dataTree)); // helper function below
+    const visibleFolderIds = new Set(getAllFolderIds(dataTree));
 
     const validPathIds = expandedItemIds.filter((id) =>
       visibleFolderIds.has(id)
@@ -41,14 +41,15 @@ function SideBar({ dataTree, setRevealFolderDialog }) {
       const merged = new Set([...prev, ...validPathIds]);
       return Array.from(merged);
     });
-  }, [folderId, dataTree]); // add dataTree here too
+  }, [folderId, dataTree]);
 
   return (
     <div className="sidebar">
       <div className="links">
         <div
-          onClick={() => {
-            setRevealFolderDialog(true);
+          onClick={(e) => {
+            e.stopPropagation();
+            setDialog(true);
           }}
         >
           <FontAwesomeIcon className="icon" icon={faFolderPlus} />

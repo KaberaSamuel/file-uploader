@@ -13,7 +13,6 @@ import {
 import { jwtSecret } from "./config/envConfig.js";
 
 const api = Router();
-const { sign, verify } = jwt;
 
 function formatDate() {
   const time = Date.now();
@@ -26,12 +25,12 @@ function formatDate() {
   return date;
 }
 
-async function authenticateToken(req, res, next) {
+async function authenticateUser(req, res, next) {
   try {
     const token = req.cookies.token;
     if (token == null) return res.status(400).json({ message: "no token" });
 
-    verify(token, jwtSecret, async (err, payload) => {
+    jwt.verify(token, jwtSecret, async (err, payload) => {
       if (err) return res.status(401).json({ message: "invalid token" });
 
       const user = await getUserById(payload.id);
@@ -44,13 +43,13 @@ async function authenticateToken(req, res, next) {
   }
 }
 
-api.get("/folders", authenticateToken, async (req, res) => {
+api.get("/folders", authenticateUser, async (req, res) => {
   const user = req.user;
   user.folders = await getFolders(req.user.id);
   res.json({ user });
 });
 
-api.get("/folders/:id", authenticateToken, async (req, res) => {
+api.get("/folders/:id", authenticateUser, async (req, res) => {
   const { id: folderId } = req.params;
   const folders = await getFolders(req.user.id, folderId);
 
@@ -59,10 +58,23 @@ api.get("/folders/:id", authenticateToken, async (req, res) => {
 
 api.post("/folders", async (req, res, next) => {
   try {
-    const { folder, id } = req.body;
+    const { folder, parentId, userId, username } = req.body;
     const date = formatDate();
-    await insertIntoFolders(folder, date, id);
-    res.end();
+    await insertIntoFolders({
+      userId,
+      parentId,
+      date,
+      folderName: folder,
+    });
+
+    const user = {
+      id: userId,
+      folders: await getFolders(userId),
+      userId: userId,
+      name: username,
+    };
+
+    res.json(user);
   } catch (error) {
     next(error);
   }
@@ -80,7 +92,7 @@ api.post("/login", async (req, res, next) => {
       return res.status(400).json({ message: "incorrect password" });
 
     // generate access token
-    const accessToken = sign(
+    const accessToken = jwt.sign(
       {
         id: user.id,
       },

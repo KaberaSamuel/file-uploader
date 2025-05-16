@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useParams } from "react-router-dom";
 import { useState } from "react";
 import { apiUrl } from "../service.js";
 import { DashboardNavbar } from "./components/navbars.jsx";
@@ -8,54 +8,74 @@ import { useAuth } from "./components/AuthProvider.jsx";
 import { useLoader } from "./components/LoadingContext.jsx";
 import SideBar from "./components/Sidebar.jsx";
 import Loader from "./components//Loader.jsx";
+import { createDataTree } from "../service.js";
 import "./styles/App.css";
 
-function NewFolderDialog({ revealFolderDialog, setRevealFolderDialog, user }) {
-  const [folder, setfolder] = useState("");
-  const navigate = useNavigate();
+// showing dialog form for creating new folder
+function Modal({ dialog, setDialog }) {
+  const { dataTree, setDataTree } = useAuth();
 
-  async function submitFolder() {
+  const [folder, setfolder] = useState("");
+  const { id } = useParams();
+
+  async function submitFolder(e) {
+    e.preventDefault();
     if (folder == "") {
       alert("the field is empty");
     } else {
-      setfolder("");
+      const user = dataTree[0];
       const response = await fetch(`${apiUrl}/folders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ folder: folder, id: user.id }),
+        body: JSON.stringify({
+          folder: folder,
+          parentId: id ? Number(id) : null,
+          userId: user.userId,
+          username: user.name,
+        }),
       });
+      const newUser = await response.json();
+      const newDataTree = createDataTree(newUser);
+      setDataTree(newDataTree);
+      setfolder("");
       if (response.ok) {
-        setRevealFolderDialog(false);
+        setDialog(false);
       }
-      navigate(0);
     }
   }
 
   return (
-    <dialog className={revealFolderDialog ? "reveal" : ""}>
-      <div className="first">
-        <p>New Folder</p>
-        <FontAwesomeIcon
-          className="icon"
-          icon={faXmark}
-          onClick={() => {
-            setRevealFolderDialog(false);
-          }}
-        />
-      </div>
+    <dialog
+      className={dialog ? "reveal" : ""}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <form onSubmit={submitFolder}>
+        <div className="first">
+          <p>New Folder</p>
+          <FontAwesomeIcon
+            className="icon"
+            icon={faXmark}
+            onClick={() => {
+              setDialog(false);
+            }}
+          />
+        </div>
 
-      <div>
-        <p>Name</p>
-        <input
-          type="text"
-          value={folder}
-          onChange={(e) => {
-            setfolder(e.target.value);
-          }}
-        />
-      </div>
+        <div>
+          <p>Name</p>
+          <input
+            type="text"
+            value={folder}
+            onChange={(e) => {
+              setfolder(e.target.value);
+            }}
+          />
+        </div>
 
-      <button onClick={submitFolder}>Create Folder</button>
+        <button type="submit">Create Folder</button>
+      </form>
     </dialog>
   );
 }
@@ -66,7 +86,7 @@ function App() {
   const { isLoading } = useLoader();
 
   // variables for form dialog
-  const [revealFolderDialog, setRevealFolderDialog] = useState(false);
+  const [dialog, setDialog] = useState(false);
 
   if (isLoading) {
     return <Loader />;
@@ -77,22 +97,19 @@ function App() {
     return <Navigate to="/login" />;
   }
 
+  function hideDialog() {
+    setDialog(false);
+  }
+
   return (
-    <div className="app">
+    <div className="app" onClick={hideDialog}>
       <DashboardNavbar />
 
       <div className="dashboard">
-        <SideBar
-          dataTree={dataTree}
-          setRevealFolderDialog={setRevealFolderDialog}
-        />
+        <SideBar dataTree={dataTree} setDialog={setDialog} />
 
         <Outlet />
-        <NewFolderDialog
-          revealFolderDialog={revealFolderDialog}
-          setRevealFolderDialog={setRevealFolderDialog}
-          user={user}
-        />
+        <Modal dialog={dialog} setDialog={setDialog} user={user} />
       </div>
     </div>
   );
