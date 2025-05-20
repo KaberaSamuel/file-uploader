@@ -56,11 +56,23 @@ function getFolderById(id, dataTree) {
 function createDataTree(user) {
   const { name: username, folders, id } = user;
 
-  // reversing the folder to start with the lates folders
-  folders.reverse();
+  const foldersTree = [];
 
-  folders.forEach((child, index) => {
-    const parent = folders.find((folder) => folder.id === child.parent_id);
+  // array to keep track of all unique added items
+  const flatArray = [];
+
+  for (const item of folders) {
+    addFoldersTree(item);
+  }
+
+  function addFoldersTree(child) {
+    // ensuring unique items
+    if (flatArray.includes(child)) {
+      return;
+    }
+
+    flatArray.push(child);
+    const parent = folders.find((folder) => folder.id == child.parent_id);
 
     if (parent) {
       // if parent already has children
@@ -70,17 +82,15 @@ function createDataTree(user) {
         parent.children = [child];
       }
 
-      const parentIndex = folders.findIndex(({ id }) => id === parent.id);
-      // updating parent element
-      folders[parentIndex] = parent;
-
-      // marking child element as taken
-      folders[index] = "taken";
+      //if parent also has a parent
+      if (parent.parent_id) {
+        addFoldersTree(parent);
+      }
+    } else {
+      // top level folder
+      foldersTree.push(child);
     }
-  });
-
-  // removing every taken child
-  const foldersTree = folders.filter((folder) => folder !== "taken");
+  }
 
   // adding user at the root
   const dataTree = [

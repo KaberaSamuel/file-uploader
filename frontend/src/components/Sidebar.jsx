@@ -5,8 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFolderPlus,
   faFileCirclePlus,
+  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import { getFolderById, getAllFolderIds, getPathArray } from "../../service";
+import {
+  createDataTree,
+  getFolderById,
+  getAllFolderIds,
+  getPathArray,
+  apiUrl,
+} from "../../service";
+import { useAuth } from "./AuthProvider";
+import { useLoader } from "./LoadingContext";
+import Loader from "./Loader";
 import "../styles/sidebar.css";
 
 function SideBar({ dataTree, setDialog }) {
@@ -18,12 +28,37 @@ function SideBar({ dataTree, setDialog }) {
 
   const navigate = useNavigate();
 
+  // current folder in view
   const folder = getFolderById(folderId, dataTree);
   const pathArray = getPathArray(folder, dataTree);
   const expandedItemIds = pathArray.map((folder) => folder.id);
 
+  const { setDataTree } = useAuth();
+  const { isLoading, setIsLoading } = useLoader();
+
   function getItemLabel(item) {
     return item.name;
+  }
+
+  async function deleteFolder() {
+    setIsLoading(true);
+
+    // link to navigate to after deleting
+    const link = folder.parent_id ? `/folders/${folder.parent_id}` : "/folders";
+    const response = await fetch(`${apiUrl}/folders`, {
+      method: "delete",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({
+        folder: folder,
+      }),
+    });
+
+    const user = await response.json();
+    const newTree = createDataTree(user);
+    setDataTree(newTree);
+    setIsLoading(false);
+    navigate(link);
   }
 
   // Sync selected and expanded items with current route
@@ -43,6 +78,10 @@ function SideBar({ dataTree, setDialog }) {
     });
   }, [folderId, dataTree]);
 
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className="sidebar">
       <div className="links">
@@ -60,6 +99,13 @@ function SideBar({ dataTree, setDialog }) {
           <FontAwesomeIcon className="icon" icon={faFileCirclePlus} />
           <p>New File</p>
         </div>
+
+        {id && (
+          <div onClick={deleteFolder}>
+            <FontAwesomeIcon className="icon" icon={faTrashCan} />
+            <p>Delete Folder</p>
+          </div>
+        )}
       </div>
 
       <RichTreeView

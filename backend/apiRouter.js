@@ -9,6 +9,7 @@ import {
   getUserByUsername,
   getUserById,
   getFolders,
+  deleteFolder,
 } from "./db.js";
 import { jwtSecret } from "./config/envConfig.js";
 
@@ -23,6 +24,25 @@ function formatDate() {
   date = dateArray.join(" ");
 
   return date;
+}
+
+// function for getting a flat array of folder and its children
+function getFlatArray(folder) {
+  const array = [];
+
+  function buildArray(currentFolder) {
+    if (currentFolder.children) {
+      currentFolder.children.forEach((child) => buildArray(child));
+      delete currentFolder.children;
+      array.push(currentFolder);
+    } else {
+      array.push(currentFolder);
+    }
+  }
+
+  buildArray(folder);
+
+  return array;
 }
 
 async function authenticateUser(req, res, next) {
@@ -49,16 +69,10 @@ api.get("/folders", authenticateUser, async (req, res) => {
   res.json({ user });
 });
 
-api.get("/folders/:id", authenticateUser, async (req, res) => {
-  const { id: folderId } = req.params;
-  const folders = await getFolders(req.user.id, folderId);
-
-  res.json({ folders });
-});
-
-api.post("/folders", async (req, res, next) => {
+api.post("/folders", authenticateUser, async (req, res, next) => {
+  const { name: username, id: userId } = req.user;
   try {
-    const { folder, parentId, userId, username } = req.body;
+    const { folder, parentId } = req.body;
     const date = formatDate();
     await insertIntoFolders({
       userId,
@@ -76,6 +90,30 @@ api.post("/folders", async (req, res, next) => {
 
     res.json(user);
   } catch (error) {
+    next(error);
+  }
+});
+
+api.get("/folders/:id", authenticateUser, async (req, res) => {
+  const { id: folderId } = req.params;
+  const folders = await getFolders(req.user.id, folderId);
+
+  res.json({ folders });
+});
+
+api.delete("/folders", authenticateUser, async (req, res, next) => {
+  try {
+    const { folder } = req.body;
+
+    // folders to delete
+    const removables = getFlatArray(folder);
+    await deleteFolder(removables);
+
+    const user = req.user;
+    user.folders = await getFolders(user.id);
+    res.json(user);
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 });

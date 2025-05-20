@@ -73,6 +73,14 @@ async function getFolders(userId, folderID = null) {
   return folders;
 }
 
+async function deleteFolder(removables) {
+  for (const folder of removables) {
+    await supabase.from("folders").delete().eq("id", folder.id);
+  }
+
+  return;
+}
+
 export {
   insertIntoUsers,
   insertIntoFolders,
@@ -80,4 +88,5 @@ export {
   getUserById,
   getFolders,
   getAllUsers,
+  deleteFolder,
 };

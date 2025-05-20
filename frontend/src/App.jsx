@@ -13,7 +13,7 @@ import "./styles/App.css";
 
 // showing dialog form for creating new folder
 function Modal({ dialog, setDialog }) {
-  const { dataTree, setDataTree } = useAuth();
+  const { setDataTree } = useAuth();
 
   const [folder, setfolder] = useState("");
   const { id } = useParams();
@@ -23,16 +23,14 @@ function Modal({ dialog, setDialog }) {
     if (folder == "") {
       alert("the field is empty");
     } else {
-      const user = dataTree[0];
       const response = await fetch(`${apiUrl}/folders`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           folder: folder,
           parentId: id ? Number(id) : null,
-          userId: user.userId,
-          username: user.name,
         }),
+        credentials: "include",
       });
       const newUser = await response.json();
       const newDataTree = createDataTree(newUser);
