@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
-import { PublicNavbar } from "./navbars.jsx";
+import { useAuth } from "./AuthProvider";
+import { useLoader } from "./LoadingContext";
+import { apiUrl, createDataTree } from "../../service";
+import Navbar from "./navbar";
+import Loader from "./Loader";
 import "../styles/forms.css";
-import Loader from "./Loader.jsx";
-import { useAuth } from "./AuthProvider.jsx";
-import { useLoader } from "./LoadingContext.jsx";
-import { apiUrl, createDataTree } from "../../service.js";
 
 function Login() {
   const [formFields, setFormFields] = useState({
@@ -61,7 +61,7 @@ function Login() {
 
   return (
     <div>
-      <PublicNavbar />
+      <Navbar />
 
       <main className="form-container login">
         <h1>Login </h1>

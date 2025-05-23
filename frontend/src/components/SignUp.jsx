@@ -1,8 +1,8 @@
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { PublicNavbar } from "./navbars.jsx";
-import { useAuth } from "./AuthProvider.jsx";
-import { apiUrl } from "../../service.js";
+import Navbar from "./navbar";
+import { useAuth } from "./AuthProvider";
+import { apiUrl } from "../../service";
 import "../styles/forms.css";
 
 function SignUp() {
@@ -51,7 +51,7 @@ function SignUp() {
 
   return (
     <div>
-      <PublicNavbar />
+      <Navbar />
 
       <main className="form-container">
         <h1>Sign Up</h1>

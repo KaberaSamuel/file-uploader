@@ -1,12 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "./AuthProvider.jsx";
 import { apiUrl } from "../../service.js";
 
-function DashboardNavbar() {
+function Navbar() {
+  const { dataTree, setDataTree } = useAuth();
+  const user = dataTree[0];
   const navigate = useNavigate();
-  const { setDataTree } = useAuth();
 
   async function logout() {
     const response = await fetch(`${apiUrl}/logout`, {
@@ -23,17 +24,18 @@ function DashboardNavbar() {
     }
   }
 
-  return (
-    <nav>
-      <Link to="/folders">File Uploader</Link>
-      <div onClick={logout}>
-        <FontAwesomeIcon className="icon" icon={faArrowRightFromBracket} />
-      </div>
-    </nav>
-  );
-}
+  // when logged in
+  if (user)
+    return (
+      <nav>
+        <Link to="/folders">File Uploader</Link>
+        <div onClick={logout}>
+          <FontAwesomeIcon className="icon" icon={faArrowRightFromBracket} />
+        </div>
+      </nav>
+    );
 
-function PublicNavbar() {
+  // when not logged in
   return (
     <nav>
       <div>
@@ -48,4 +50,4 @@ function PublicNavbar() {
   );
 }
 
-export { DashboardNavbar, PublicNavbar };
+export default Navbar;

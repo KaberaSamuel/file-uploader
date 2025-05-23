@@ -7,25 +7,15 @@ import {
   faFileCirclePlus,
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
-import {
-  createDataTree,
-  getFolderById,
-  getAllFolderIds,
-  getPathArray,
-  apiUrl,
-} from "../../service";
-import { useAuth } from "./AuthProvider";
-import { useLoader } from "./LoadingContext";
-import Loader from "./Loader";
+import { getFolderById, getAllFolderIds, getPathArray } from "../../service";
 import "../styles/sidebar.css";
 
-function SideBar({ dataTree, setDialog }) {
+function SideBar({ dataTree, setActiveModal }) {
   const { id } = useParams();
   const folderId = id ? Number(id) : 0;
 
   const [selectedItems, setSelectedItems] = useState([folderId]);
   const [expandedItems, setExpandedItems] = useState([]);
-
   const navigate = useNavigate();
 
   // current folder in view
@@ -33,32 +23,8 @@ function SideBar({ dataTree, setDialog }) {
   const pathArray = getPathArray(folder, dataTree);
   const expandedItemIds = pathArray.map((folder) => folder.id);
 
-  const { setDataTree } = useAuth();
-  const { isLoading, setIsLoading } = useLoader();
-
   function getItemLabel(item) {
     return item.name;
-  }
-
-  async function deleteFolder() {
-    setIsLoading(true);
-
-    // link to navigate to after deleting
-    const link = folder.parent_id ? `/folders/${folder.parent_id}` : "/folders";
-    const response = await fetch(`${apiUrl}/folders`, {
-      method: "delete",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({
-        folder: folder,
-      }),
-    });
-
-    const user = await response.json();
-    const newTree = createDataTree(user);
-    setDataTree(newTree);
-    setIsLoading(false);
-    navigate(link);
   }
 
   // Sync selected and expanded items with current route
@@ -68,8 +34,8 @@ function SideBar({ dataTree, setDialog }) {
     // Only merge valid folders that still exist in the tree
     const visibleFolderIds = new Set(getAllFolderIds(dataTree));
 
-    const validPathIds = expandedItemIds.filter((id) =>
-      visibleFolderIds.has(id)
+    const validPathIds = expandedItemIds.filter(
+      (id) => !visibleFolderIds.has(id)
     );
 
     setExpandedItems((prev) => {
@@ -78,30 +44,33 @@ function SideBar({ dataTree, setDialog }) {
     });
   }, [folderId, dataTree]);
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
   return (
     <div className="sidebar">
       <div className="links">
         <div
-          onClick={(e) => {
-            e.stopPropagation();
-            setDialog(true);
+          onClick={() => {
+            setActiveModal("create");
           }}
         >
           <FontAwesomeIcon className="icon" icon={faFolderPlus} />
           <p>New Folder</p>
         </div>
 
-        <div>
+        <div
+          onClick={() => {
+            setActiveModal("upload-file");
+          }}
+        >
           <FontAwesomeIcon className="icon" icon={faFileCirclePlus} />
           <p>New File</p>
         </div>
 
         {id && (
-          <div onClick={deleteFolder}>
+          <div
+            onClick={() => {
+              setActiveModal("delete");
+            }}
+          >
             <FontAwesomeIcon className="icon" icon={faTrashCan} />
             <p>Delete Folder</p>
           </div>

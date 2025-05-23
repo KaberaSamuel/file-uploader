@@ -1,7 +1,6 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
 import "./config/passportConfig.js";
 import {
   insertIntoUsers,
@@ -94,13 +93,6 @@ api.post("/folders", authenticateUser, async (req, res, next) => {
   }
 });
 
-api.get("/folders/:id", authenticateUser, async (req, res) => {
-  const { id: folderId } = req.params;
-  const folders = await getFolders(req.user.id, folderId);
-
-  res.json({ folders });
-});
-
 api.delete("/folders", authenticateUser, async (req, res, next) => {
   try {
     const { folder } = req.body;
@@ -116,6 +108,13 @@ api.delete("/folders", authenticateUser, async (req, res, next) => {
     console.log(error);
     next(error);
   }
+});
+
+api.get("/folders/:id", authenticateUser, async (req, res) => {
+  const { id: folderId } = req.params;
+  const folders = await getFolders(req.user.id, folderId);
+
+  res.json({ folders });
 });
 
 api.post("/login", async (req, res, next) => {
