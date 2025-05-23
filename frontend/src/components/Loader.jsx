@@ -2,7 +2,7 @@ import "../styles/loader.css";
 
 function Loader() {
   return (
-    <div className="loader">
+    <div className="app-loader">
       <div className="spinner"></div>
     </div>
   );

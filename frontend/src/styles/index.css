@@ -11,7 +11,9 @@
   --darkgray: #2e2e2e;
   --white: #ffffff;
   --lightwhite: #acacac;
-  --lightblue: #2c99ff;
+  --lightblue: #45c7ff;
+  --lightblue2: #417196;
+  --lightgreen: #45c0bf;
   --nav-height: 60px;
 }
 
@@ -69,4 +71,33 @@ input[type="checkbox"] {
   width: 17px;
   height: 17px;
   margin-right: 2px;
+}
+
+dialog {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: left top;
+  width: 37vw;
+  padding: 25px;
+  background-color: var(--darkgray);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  scale: 0.5;
+  opacity: 0.5;
+  z-index: -100;
+  color: white;
+  transition: scale 0.3s, opacity 0.3s;
+  border-radius: 20px;
+  border: 2px solid var(--lightblue);
+}
+
+dialog.reveal {
+  scale: 1;
+  opacity: 1;
+  z-index: 100;
+  transition: scale 0.3s, opacity 0.3s;
 }

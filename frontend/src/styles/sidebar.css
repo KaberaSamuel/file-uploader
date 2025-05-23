@@ -14,12 +14,15 @@
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.links div {
-  border: 1px solid gray;
   border-radius: 5px;
   margin-bottom: 5px;
+  border: 1px solid gray;
+}
+
+.links div:hover {
+  color: var(--lightblue);
+  background-color: #3d98ff44;
+  border: 1px solid var(--lightblue);
 }
 
 .tree-view svg {
@@ -29,4 +32,20 @@
 .tree-view .Mui-selected {
   border-left: 3px solid var(--lightblue);
   border-radius: 0;
+}
+
+.sidebar .cancel {
+  background-color: var(--darkgray);
+  color: white;
+  border: 1px solid gray;
+}
+
+.sidebar .cancel:hover {
+  color: var(--lightblue);
+  background-color: #3d98ff44;
+  border: 1px solid var(--lightblue);
+}
+
+.sidebar .delete:hover {
+  background-color: var(--lightgreen);
 }

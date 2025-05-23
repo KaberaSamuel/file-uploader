@@ -1,3 +1,9 @@
 ✔ function to build tree Array
 ✔ Implement the deleting function
-* Implement loading functionality when creating and deleting a folder
+✔ Implement loading functionality when creating and deleting a folder
+✔ Making modal dialogs reusable with children props
+✔ Fixing Delete Folder Dialog 
+* Stoping Pointer events when dialog on
+
+
+

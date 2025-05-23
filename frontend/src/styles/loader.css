@@ -1,11 +1,11 @@
-.loader {
+.app-loader {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.spinner {
+.app-loader .spinner {
   width: 50px;
   --b: 8px;
   aspect-ratio: 1;
