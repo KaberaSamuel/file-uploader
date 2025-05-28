@@ -54,7 +54,7 @@ function getFolderById(id, dataTree) {
 
 // function to create data tree from user object
 function createDataTree(user) {
-  const { name: username, folders, id } = user;
+  const { name: username, folders, files, id } = user;
 
   const foldersTree = [];
 
@@ -98,6 +98,7 @@ function createDataTree(user) {
       name: username,
       id: 0,
       parent_id: null,
+      files: files,
       children: foldersTree,
       userId: id,
     },

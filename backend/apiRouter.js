@@ -1,13 +1,18 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
+import { decode } from "base64-arraybuffer";
 import jwt from "jsonwebtoken";
+
 import {
   insertIntoUsers,
   insertIntoFolders,
+  insertIntoFiles,
   getUserByUsername,
   getUserById,
   getFolders,
+  getFiles,
   deleteFolder,
+  uploadFile,
 } from "./db.js";
 
 import { jwtSecret } from "./config/envConfig.js";
@@ -66,14 +71,14 @@ async function authenticateUser(req, res, next) {
 
 api.get("/folders", authenticateUser, async (req, res) => {
   const user = req.user;
-  user.folders = await getFolders(req.user.id);
+  user.folders = await getFolders(user.id);
+  user.files = await getFiles(user.id);
   res.json({ user });
 });
 
-api.post("/folders", authenticateUser, async (req, res, next) => {
-  const { name: username, id: userId } = req.user;
+api.post("/folders", async (req, res, next) => {
   try {
-    const { folder, parentId } = req.body;
+    const { folder, parentId, userId, username } = req.body;
     const date = formatDate();
     await insertIntoFolders({
       userId,
@@ -82,9 +87,11 @@ api.post("/folders", authenticateUser, async (req, res, next) => {
       folderName: folder,
     });
 
+    // updated user to send to the client
     const user = {
       id: userId,
       folders: await getFolders(userId),
+      files: await getFiles(userId),
       userId: userId,
       name: username,
     };
@@ -95,16 +102,16 @@ api.post("/folders", authenticateUser, async (req, res, next) => {
   }
 });
 
-api.delete("/folders", authenticateUser, async (req, res, next) => {
+api.delete("/folders", async (req, res, next) => {
   try {
-    const { folder } = req.body;
+    const { folder, userId } = req.body;
 
     // folders to delete
     const removables = getFlatArray(folder);
     await deleteFolder(removables);
 
-    const user = req.user;
-    user.folders = await getFolders(user.id);
+    const user = await getUserById(userId);
+    user.folders = await getFolders(userId);
     res.json(user);
   } catch (error) {
     console.log(error);
@@ -119,9 +126,36 @@ api.get("/folders/:id", authenticateUser, async (req, res) => {
   res.json({ folders });
 });
 
-api.post("/files", upload.single("file"), (req, res) => {
-  console.log("done");
-  res.end();
+api.post("/files", upload.single("file"), async (req, res) => {
+  try {
+    const file = req.file;
+    const { parentFolderId, userId, username } = req.body;
+
+    if (!file) {
+      res.status(400).end();
+      return;
+    }
+
+    // decode file buffer to base64
+    const fileBase64 = decode(file.buffer.toString("base64"));
+
+    const uploadedFile = await uploadFile(file, fileBase64);
+    await insertIntoFiles(uploadedFile, parentFolderId, userId);
+
+    // updated user to send to the client
+    const user = {
+      id: userId,
+      folders: await getFolders(userId),
+      files: await getFiles(userId),
+      userId: userId,
+      name: username,
+    };
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).end();
+  }
 });
 
 api.post("/login", async (req, res, next) => {

@@ -4,8 +4,9 @@
 ✔ Fixing Delete Folder Dialog issues 
 ✔ Stoping Pointer events when dialog on
 ✔ Making Navbar Component reusable
-* Fix file upload issues 
-* Implement file upload and bucket storage with supabase
+✔ Implement file upload and bucket storage with supabase
+* display files in a folder
+* replace useLoader for loaders for individual loaders 
 * Fix sidebar treeview expanding/collapsing issues
 
 

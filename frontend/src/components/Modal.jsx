@@ -7,7 +7,8 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 function CreateFolder({ setActiveModal }) {
   const { id } = useParams();
-  const { setDataTree } = useAuth();
+  const { dataTree, setDataTree } = useAuth();
+  const { userId, name } = dataTree[0];
 
   const [pending, setPending] = useState(false);
   const [folder, setFolder] = useState("");
@@ -21,6 +22,8 @@ function CreateFolder({ setActiveModal }) {
       body: JSON.stringify({
         folder: folder ? folder : "New Folder",
         parentId: id ? Number(id) : null,
+        userId: userId,
+        username: name,
       }),
       credentials: "include",
     });
@@ -93,6 +96,7 @@ function DeleteFolder({ setActiveModal }) {
       credentials: "include",
       body: JSON.stringify({
         folder: folder,
+        userId: dataTree[0].userId,
       }),
     });
 
@@ -142,26 +146,57 @@ function DeleteFolder({ setActiveModal }) {
 }
 
 function AddFile({ setActiveModal }) {
+  const { id } = useParams();
+  const { dataTree, setDataTree } = useAuth();
+  const [pending, setPending] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const onFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
+
+  const { name, userId } = dataTree[0];
+
+  function onFileChange(e) {
+    setSelectedFile(e.target.files[0]);
+  }
 
   async function uploadFile(e) {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-    await fetch(`${apiUrl}/files`, {
-      method: "POST",
-      body: formData,
-      credentials: "include",
-    });
+    try {
+      e.preventDefault();
+      setPending(true);
+
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("parentFolderId", id ? id : null);
+      formData.append("userId", userId);
+      formData.append("username", name);
+
+      const response = await fetch(`${apiUrl}/files`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const newUser = await response.json();
+        const newDataTree = createDataTree(newUser);
+        setDataTree(newDataTree);
+      }
+
+      if (response.status == 400) {
+        alert("Please choose a file");
+      }
+
+      // updating UI
+      setPending(false);
+      setActiveModal(null);
+    } catch {
+      setPending(false);
+      setActiveModal(null);
+    }
   }
 
   return (
     <form onSubmit={uploadFile}>
       <div className="first">
-        <p>New Folder</p>
+        <p>New File</p>
         <FontAwesomeIcon
           className="icon"
           icon={faXmark}
@@ -175,7 +210,13 @@ function AddFile({ setActiveModal }) {
         <input type="file" onChange={onFileChange} />
       </div>
 
-      <button type="submit">Upload</button>
+      {pending ? (
+        <button disabled>
+          <div className="pending"></div>
+        </button>
+      ) : (
+        <button type="submit">Upload</button>
+      )}
     </form>
   );
 }

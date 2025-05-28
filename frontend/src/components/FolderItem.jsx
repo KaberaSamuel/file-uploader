@@ -40,7 +40,7 @@ function Items({ folders }) {
   }
 }
 
-export function FolderView({ pathArray, folderContent }) {
+function FolderView({ pathArray, folderContent }) {
   const lastIndex = pathArray.length - 1;
   return (
     <div className="folder-content">

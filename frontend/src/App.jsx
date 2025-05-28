@@ -15,12 +15,12 @@ function App() {
 
   // modal's variables
   const [activeModal, setActiveModal] = useState(null);
+  const user = dataTree[0];
 
   if (isLoading) {
     return <Loader />;
   }
 
-  const user = dataTree[0];
   if (!user) {
     return <Navigate to="/login" />;
   }

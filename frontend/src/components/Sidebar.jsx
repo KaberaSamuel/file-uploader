@@ -79,11 +79,11 @@ function SideBar({ dataTree, setActiveModal }) {
 
       <RichTreeView
         items={dataTree}
+        getItemLabel={getItemLabel}
         selectedItems={selectedItems}
         onSelectedItemsChange={(event, ids) => setSelectedItems(ids)}
         expandedItems={expandedItems}
         onExpandedItemsChange={(event, ids) => setExpandedItems(ids)}
-        getItemLabel={getItemLabel}
         onItemClick={(e, id) => {
           if (id === 0) {
             navigate("/folders");
