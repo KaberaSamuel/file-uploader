@@ -142,8 +142,24 @@ function DeleteFolder({ setActiveModal }) {
 }
 
 function AddFile({ setActiveModal }) {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const onFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  async function uploadFile(e) {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    await fetch(`${apiUrl}/files`, {
+      method: "POST",
+      body: formData,
+      credentials: "include",
+    });
+  }
+
   return (
-    <form>
+    <form onSubmit={uploadFile}>
       <div className="first">
         <p>New Folder</p>
         <FontAwesomeIcon
@@ -156,7 +172,7 @@ function AddFile({ setActiveModal }) {
       </div>
 
       <div>
-        <input type="file" />
+        <input type="file" onChange={onFileChange} />
       </div>
 
       <button type="submit">Upload</button>

@@ -4,7 +4,9 @@
 ✔ Fixing Delete Folder Dialog issues 
 ✔ Stoping Pointer events when dialog on
 ✔ Making Navbar Component reusable
-✔ Fixing sidebar treeview expanding/collapsing issues
-* Implement file uploads functionality
+* Fix file upload issues 
+* Implement file upload and bucket storage with supabase
+* Fix sidebar treeview expanding/collapsing issues
+
 
 

@@ -1,7 +1,6 @@
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import "./config/passportConfig.js";
 import {
   insertIntoUsers,
   insertIntoFolders,
@@ -10,7 +9,10 @@ import {
   getFolders,
   deleteFolder,
 } from "./db.js";
+
 import { jwtSecret } from "./config/envConfig.js";
+import upload from "./config/multerConfig.js";
+import "./config/passportConfig.js";
 
 const api = Router();
 
@@ -115,6 +117,11 @@ api.get("/folders/:id", authenticateUser, async (req, res) => {
   const folders = await getFolders(req.user.id, folderId);
 
   res.json({ folders });
+});
+
+api.post("/files", upload.single("file"), (req, res) => {
+  console.log("done");
+  res.end();
 });
 
 api.post("/login", async (req, res, next) => {
