@@ -52,6 +52,23 @@ function getFolderById(id, dataTree) {
   }
 }
 
+// function to get files in a certain a folder
+function getFiles(id, dataTree) {
+  const allFiles = dataTree[0].files;
+
+  let files;
+
+  if (id) {
+    files = allFiles.filter((file) => file.parent_id == id);
+  } else {
+    files = allFiles.filter((file) => file.parent_id == null);
+  }
+
+  console.log(files);
+
+  return files;
+}
+
 // function to create data tree from user object
 function createDataTree(user) {
   const { name: username, folders, files, id } = user;
@@ -139,4 +156,5 @@ export {
   getFolderById,
   getPathArray,
   getAllFolderIds,
+  getFiles,
 };

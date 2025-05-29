@@ -5,7 +5,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Loader from "./Loader";
 import { useParams, useNavigation, Link } from "react-router-dom";
-import { getFolderById, getPathArray } from "../../service.js";
+import { getFiles, getFolderById, getPathArray } from "../../service.js";
 import { useAuth } from "./AuthProvider";
 
 function Items({ folders }) {
@@ -40,7 +40,7 @@ function Items({ folders }) {
   }
 }
 
-function FolderView({ pathArray, folderContent }) {
+function FolderView({ pathArray, folders }) {
   const lastIndex = pathArray.length - 1;
   return (
     <div className="folder-content">
@@ -64,7 +64,7 @@ function FolderView({ pathArray, folderContent }) {
         })}
       </div>
 
-      <Items folders={folderContent} />
+      <Items folders={folders} />
     </div>
   );
 }
@@ -79,11 +79,19 @@ function FolderItem() {
 
   const navigate = useNavigation();
 
+  const childFiles = getFiles(id, dataTree);
+
   if (navigate.state == "loading") {
     return <Loader />;
   }
 
-  return <FolderView pathArray={pathArray} folderContent={folder.children} />;
+  return (
+    <FolderView
+      pathArray={pathArray}
+      folders={folder.children}
+      files={childFiles}
+    />
+  );
 }
 
 // default folder item for user data
@@ -93,7 +101,7 @@ function DefaultFolderItem() {
   const user = dataTree[0];
   const pathArray = [{ name: user.name, id: 0 }];
 
-  const folderContent = user.children;
+  const folders = user.children;
 
   const navigate = useNavigation();
 
@@ -101,7 +109,11 @@ function DefaultFolderItem() {
     return <Loader />;
   }
 
-  return <FolderView pathArray={pathArray} folderContent={folderContent} />;
+  const childFiles = getFiles(null, dataTree);
+
+  return (
+    <FolderView pathArray={pathArray} folders={folders} files={childFiles} />
+  );
 }
 
 export { DefaultFolderItem, FolderItem };
