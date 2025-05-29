@@ -73,18 +73,18 @@ api.get("/folders", authenticateUser, async (req, res) => {
   const user = req.user;
   user.folders = await getFolders(user.id);
   user.files = await getFiles(user.id);
-  res.json({ user });
+  res.json(user);
 });
 
 api.post("/folders", async (req, res, next) => {
   try {
-    const { folder, parentId, userId, username } = req.body;
+    const { folder: folderName, parentId, userId, username } = req.body;
     const date = formatDate();
     await insertIntoFolders({
       userId,
       parentId,
       date,
-      folderName: folder,
+      folderName,
     });
 
     // updated user to send to the client
@@ -92,7 +92,6 @@ api.post("/folders", async (req, res, next) => {
       id: userId,
       folders: await getFolders(userId),
       files: await getFiles(userId),
-      userId: userId,
       name: username,
     };
 
@@ -112,18 +111,12 @@ api.delete("/folders", async (req, res, next) => {
 
     const user = await getUserById(userId);
     user.folders = await getFolders(userId);
+    user.files = await getFiles(userId);
     res.json(user);
   } catch (error) {
     console.log(error);
     next(error);
   }
-});
-
-api.get("/folders/:id", authenticateUser, async (req, res) => {
-  const { id: folderId } = req.params;
-  const folders = await getFolders(req.user.id, folderId);
-
-  res.json({ folders });
 });
 
 api.post("/files", upload.single("file"), async (req, res) => {
@@ -147,7 +140,6 @@ api.post("/files", upload.single("file"), async (req, res) => {
       id: userId,
       folders: await getFolders(userId),
       files: await getFiles(userId),
-      userId: userId,
       name: username,
     };
 
@@ -185,8 +177,8 @@ api.post("/login", async (req, res, next) => {
     });
 
     user.folders = await getFolders(user.id);
-
-    return res.json({ user });
+    user.files = await getFiles(user.id);
+    return res.json(user);
   } catch (error) {
     next(error);
   }

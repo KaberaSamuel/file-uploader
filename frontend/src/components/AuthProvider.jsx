@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { useLoader } from "./LoadingContext";
-import { getDataTree } from "../../service";
+import { apiUrl, extractData } from "../../service";
 
 const AuthContext = createContext();
 
@@ -10,12 +10,17 @@ function AuthProvider({ children }) {
 
   useEffect(() => {
     (async function () {
-      // lazily loading dataTree for better user experience
-      setTimeout(async () => {
-        const userDataTree = await getDataTree();
-        setDataTree(userDataTree);
-        setIsLoading(false);
-      }, 1000);
+      const response = await fetch(`${apiUrl}/folders`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const userDataTree = await extractData(response);
+      setDataTree(userDataTree);
+      setIsLoading(false);
     })();
   }, []);
 

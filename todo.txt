@@ -1,3 +1,5 @@
+
+
 ✔ function to build tree Array
 ✔ Implement loading functionality when creating and deleting a folder
 ✔ Making modal dialogs reusable with children props
@@ -5,6 +7,8 @@
 ✔ Stoping Pointer events when dialog on
 ✔ Making Navbar Component reusable
 ✔ Implement file upload and bucket storage with supabase
+✔ How to read files from supabase bucket
+* fix date issues on files on the client
 * display files in a folder
 * replace useLoader for loaders for individual loaders 
 * Fix sidebar treeview expanding/collapsing issues

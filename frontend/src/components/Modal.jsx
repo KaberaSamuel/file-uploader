@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate, Form } from "react-router-dom";
-import { apiUrl, createDataTree, getFolderById } from "../../service";
+import { apiUrl, extractData, getFolderById } from "../../service";
 import { useAuth } from "./AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -28,8 +28,7 @@ function CreateFolder({ setActiveModal }) {
       credentials: "include",
     });
 
-    const newUser = await response.json();
-    const newDataTree = createDataTree(newUser);
+    const newDataTree = await extractData(response);
 
     // updating UI
     setActiveModal(null);
@@ -100,8 +99,7 @@ function DeleteFolder({ setActiveModal }) {
       }),
     });
 
-    const user = await response.json();
-    const newDataTree = createDataTree(user);
+    const newDataTree = await extractData(response);
 
     // updating UI
     setPending(false);
@@ -175,8 +173,7 @@ function AddFile({ setActiveModal }) {
       });
 
       if (response.ok) {
-        const newUser = await response.json();
-        const newDataTree = createDataTree(newUser);
+        const newDataTree = await extractData(response);
         setDataTree(newDataTree);
       }
 

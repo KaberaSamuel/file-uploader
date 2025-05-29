@@ -105,10 +105,13 @@ async function deleteFolder(removables) {
 }
 
 async function uploadFile(file, fileBase64) {
-  // upload the file to supabase
+  const uniqueName = Date.now() + "-" + file.originalname;
   const { data, error } = await supabase.storage
     .from("files")
-    .upload(Date.now() + "-" + file.originalname, fileBase64);
+    .upload(uniqueName, fileBase64, {
+      contentType: file.mimetype,
+      createdAt: Date.now(),
+    });
 
   if (error) {
     throw error;

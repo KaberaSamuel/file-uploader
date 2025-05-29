@@ -1,6 +1,20 @@
 // const apiUrl = "https://file-uploader-xctw.onrender.com";
 const apiUrl = "http://localhost:3000";
 
+function getDateString(milliSecs) {
+  const date = new Date(milliSecs);
+  let [, day, month, year, time] = date.toUTCString().split(" ");
+  const dateString = `${month} ${day}, ${year}, ${time}`;
+  return dateString;
+}
+
+function getSize(bytes) {
+  // converting to kilo bytes
+  let size = bytes / 1000;
+  size = size < 1000 ? `${size} KB` : `${size / 1000} MB`;
+  return size;
+}
+
 function getAllFolderIds(items) {
   const ids = [];
 
@@ -52,10 +66,42 @@ function getFolderById(id, dataTree) {
   }
 }
 
+// function to get actual files from bucket storage urls
+async function getReadyFiles(fileRows) {
+  const files = [];
+
+  for (const { url } of fileRows) {
+    const nameParts = url.split("/").toReversed()[0].split("-");
+    const milliSecs = Number(nameParts[0]);
+    const fileName = nameParts[1];
+
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const file = new File([blob], fileName, { type: blob.type });
+    file.created_at = getDateString(milliSecs);
+    file.convertedSize = getSize(file.size);
+    files.push(file);
+  }
+
+  return files;
+}
+
+function getFilesInFolder(id, dataTree) {
+  const allFiles = dataTree[0].files;
+  let files;
+
+  if (id) {
+    files = allFiles.filter((file) => file.parent_id == id);
+  } else {
+    files = allFiles.filter((file) => file.parent_id == null);
+  }
+
+  return files;
+}
+
 // function to create data tree from user object
 function createDataTree(user) {
-  const { name: username, folders, files, id } = user;
-
+  const { name: username, folders, readyFiles, id } = user;
   const foldersTree = [];
 
   // array to keep track of all unique added items
@@ -98,7 +144,7 @@ function createDataTree(user) {
       name: username,
       id: 0,
       parent_id: null,
-      files: files,
+      files: readyFiles,
       children: foldersTree,
       userId: id,
     },
@@ -107,24 +153,15 @@ function createDataTree(user) {
   return dataTree;
 }
 
-// function to load user data and create data tree
-async function getDataTree() {
+// function to load data from server response and create data tree
+async function extractData(response) {
   try {
-    const response = await fetch(`${apiUrl}/folders`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
+    // when not logged in
+    if (!response.ok) return [null];
 
-    if (!response.ok) {
-      return [null];
-    }
-
-    const { user } = await response.json();
+    const user = await response.json();
+    user.readyFiles = await getReadyFiles(user.files);
     const dataTree = createDataTree(user);
-
     return dataTree;
   } catch (error) {
     console.log(error);
@@ -135,8 +172,9 @@ async function getDataTree() {
 export {
   apiUrl,
   createDataTree,
-  getDataTree,
+  extractData,
   getFolderById,
   getPathArray,
   getAllFolderIds,
+  getFilesInFolder,
 };

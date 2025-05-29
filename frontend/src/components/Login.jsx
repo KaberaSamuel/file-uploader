@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import { useLoader } from "./LoadingContext";
-import { apiUrl, createDataTree } from "../../service";
+import { apiUrl, extractData } from "../../service";
 import Navbar from "./navbar";
 import Loader from "./Loader";
 import "../styles/forms.css";
@@ -40,8 +40,7 @@ function Login() {
       const { message } = await response.json();
       setErrorMessage(message);
     } else {
-      const { user } = await response.json();
-      const dataTree = createDataTree(user);
+      const dataTree = await extractData(response);
       setDataTree(dataTree);
 
       navigate("/folders").then(
