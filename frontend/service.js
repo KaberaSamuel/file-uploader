@@ -10,8 +10,10 @@ function getDateString(milliSecs) {
 
 function getSize(bytes) {
   // converting to kilo bytes
-  let size = bytes / 1000;
-  size = size < 1000 ? `${size} KB` : `${size / 1000} MB`;
+  let size = bytes / 1024;
+
+  size =
+    size < 1000 ? `${size.toFixed(2)} KB` : `${(size / 1024).toFixed(2)} MB`;
   return size;
 }
 
