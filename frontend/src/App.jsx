@@ -25,7 +25,7 @@ function App() {
     return <Navigate to="/login" />;
   }
 
-  console.log(user.files);
+  
 
   return (
     <div className="app">

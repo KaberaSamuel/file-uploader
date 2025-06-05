@@ -14,13 +14,11 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "pg": "^8.14.1"
+    "pg": "^8.14.1",
+    "base64-arraybuffer": "^1.0.2"
   },
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon --legacy-watch app.js"
-  },
-  "devDependencies": {
-    "base64-arraybuffer": "^1.0.2"
   }
 }

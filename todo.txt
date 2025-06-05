@@ -8,7 +8,8 @@
 ✔ Making Navbar Component reusable
 ✔ Implement file upload and bucket storage with supabase
 ✔ How to read files from supabase bucket
-* fix date issues on files on the client
+✔ fix date issues on files on the client
+* fix id issues when rending file lists, folderItem.jsx
 * display files in a folder
 * replace useLoader for loaders for individual loaders 
 * Fix sidebar treeview expanding/collapsing issues

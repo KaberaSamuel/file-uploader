@@ -1,33 +1,40 @@
 .app {
   min-height: 100vh;
-  background-color: black;
+  background-color: var(--dark);
 }
 
 .dashboard {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: grid;
   grid-template-columns: 300px 1fr;
   text-align: left;
 }
 
 .folder-content {
-  padding: 20px;
+  padding: 17px;
 }
 
 .folder-content ul {
-  margin-top: 20px;
+  margin-top: 10px;
   padding: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.folder-content li a,
+
+.folder-content li .item,
 .folder-content li.header {
+  font-size: 0.9rem;
   display: grid;
   grid-template-columns: 50% 25% 25%;
-  padding: 5px 10px;
+  padding:  10px;
+}
+
+.folder-content li .item {
+  color: var(--lightwhite);
+  background-color: var(--lightdark);
   border: 1px solid gray;
   border-radius: 5px;
 }
@@ -36,10 +43,11 @@
   font-weight: 600;
   color: white;
   text-transform: capitalize;
-  border: none;
+  padding: 7px 5px;
+
 }
 
-.folder-content li div {
+.folder-content li .label {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -57,6 +65,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+
 }
 
 .folder-content .path-bar a {
@@ -89,7 +98,6 @@
 
 .dialog input {
   border: 2px solid var(--lightblue);
-  /* box-shadow: 0px 0px 0px 3px var(--lightblue2); */
 }
 
 .dialog button {

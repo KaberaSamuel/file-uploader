@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFolderClosed,
   faChevronRight,
+  faFile
 } from "@fortawesome/free-solid-svg-icons";
 import Loader from "./Loader";
 import { useParams, useNavigation, Link } from "react-router-dom";
@@ -12,8 +13,9 @@ import {
 } from "../../service.js";
 import { useAuth } from "./AuthProvider";
 
-function Items({ folders }) {
-  if (folders && folders.length > 0) {
+function Items({ folders, files }) {
+  // if folder isn't empty
+  if (folders.length > 0 || files.length > 0) {
     return (
       <ul>
         <li className="header">
@@ -21,18 +23,40 @@ function Items({ folders }) {
           <p>size</p>
           <p>created</p>
         </li>
+
+        {/* Looping through folders and rendering them */}
         {folders.map(({ id, name, date }) => (
           <li key={id}>
-            <Link to={`/folders/${id}`}>
-              <div>
+            <Link to={`/folders/${id}`} className="item">
+              <div className="label">
                 <FontAwesomeIcon className="icon" icon={faFolderClosed} />
                 <p>{name}</p>
               </div>
-              <p>--</p>
+              <p>--</p> 
               <p>{date}</p>
             </Link>
           </li>
         ))}
+
+        {/* Looping through files and rendering them */}
+        {files.map(({ id, name, created_at, convertedSize }) => {
+          let date = created_at.split(",").slice(0, -1)
+          date = date.join(",")
+          
+          return (
+          <li key={id}>
+              <div className="item">
+                <div className="label">
+                  <FontAwesomeIcon className="icon" icon={faFile} />
+                  <p>{name}</p>
+                </div>
+                <p>{convertedSize}</p> 
+                <p>{date}</p>
+              </div>
+          </li>
+        )
+        })}
+        
       </ul>
     );
   } else {
@@ -44,7 +68,7 @@ function Items({ folders }) {
   }
 }
 
-function FolderView({ pathArray, folders }) {
+function FolderView({ pathArray, folders, files }) {
   const lastIndex = pathArray.length - 1;
   return (
     <div className="folder-content">
@@ -68,7 +92,7 @@ function FolderView({ pathArray, folders }) {
         })}
       </div>
 
-      <Items folders={folders} />
+      <Items folders={folders} files={files}/>
     </div>
   );
 }
@@ -92,13 +116,13 @@ function FolderItem() {
   return (
     <FolderView
       pathArray={pathArray}
-      folders={folder.children}
+      folders={folder.children ? folder.children : []}
       files={childFiles}
     />
   );
 }
 
-// default folder item for user data
+// default foitem for user data
 function DefaultFolderItem() {
   const { dataTree } = useAuth();
   const user = dataTree[0];
@@ -113,10 +137,10 @@ function DefaultFolderItem() {
     return <Loader />;
   }
 
-  // const childFiles = getFilesInFolder(null, dataTree);
-  // console.log(childFiles);
+  const childFiles = getFilesInFolder(null, dataTree);
 
-  return <FolderView pathArray={pathArray} folders={folders} />;
+
+  return <FolderView pathArray={pathArray} folders={folders} files={childFiles}/>;
 }
 
 export { DefaultFolderItem, FolderItem };

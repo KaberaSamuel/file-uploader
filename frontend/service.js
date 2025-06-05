@@ -10,8 +10,10 @@ function getDateString(milliSecs) {
 
 function getSize(bytes) {
   // converting to kilo bytes
-  let size = bytes / 1000;
-  size = size < 1000 ? `${size} KB` : `${size / 1000} MB`;
+  let size = bytes / 1024;
+
+  size =
+    size < 1000 ? `${size.toFixed(2)} KB` : `${(size / 1024).toFixed(2)} MB`;
   return size;
 }
 
@@ -70,16 +72,21 @@ function getFolderById(id, dataTree) {
 async function getReadyFiles(fileRows) {
   const files = [];
 
-  for (const { url } of fileRows) {
+  for (const { id, url, parent_id } of fileRows) {
     const nameParts = url.split("/").toReversed()[0].split("-");
     const milliSecs = Number(nameParts[0]);
-    const fileName = nameParts[1];
+    let fileName = nameParts[1];
+    fileName = fileName.replaceAll("%20", " ")
 
     const response = await fetch(url);
     const blob = await response.blob();
     const file = new File([blob], fileName, { type: blob.type });
+
+    // props for the ready file
     file.created_at = getDateString(milliSecs);
     file.convertedSize = getSize(file.size);
+    file.parent_id = parent_id
+    file.id = id
     files.push(file);
   }
 

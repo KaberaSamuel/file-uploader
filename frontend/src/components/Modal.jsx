@@ -204,7 +204,7 @@ function AddFile({ setActiveModal }) {
       </div>
 
       <div>
-        <input type="file" onChange={onFileChange} />
+        <input type="file" accept=".txt,.doc,.docx,.pdf,.rtf,.png,.jpg,.jpeg,.mp3" onChange={onFileChange} />
       </div>
 
       {pending ? (

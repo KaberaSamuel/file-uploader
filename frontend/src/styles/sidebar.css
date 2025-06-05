@@ -9,8 +9,9 @@
 }
 
 .links div {
-  padding: 7px 15px;
+  padding: 7px 12px;
   color: var(--lightwhite);
+  background-color: var(--lightdark);
   display: flex;
   align-items: center;
   gap: 10px;
