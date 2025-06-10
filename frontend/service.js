@@ -160,10 +160,10 @@ function createDataTree(user) {
   return dataTree;
 }
 
-// function to load data from server response and create data tree
+// function to extract data from server response and create data tree
 async function extractData(response) {
   try {
-    // when not logged in
+    // when logged in
     if (!response.ok) return [null];
 
     const user = await response.json();
@@ -171,6 +171,7 @@ async function extractData(response) {
     const dataTree = createDataTree(user);
     return dataTree;
   } catch (error) {
+    // when not logged
     console.log(error);
     return [null];
   }

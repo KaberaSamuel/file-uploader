@@ -33,9 +33,8 @@ function SideBar({ dataTree, setActiveModal }) {
 
     // Only merge valid folders that still exist in the tree
     const visibleFolderIds = new Set(getAllFolderIds(dataTree));
-
     const validPathIds = expandedItemIds.filter(
-      (id) => !visibleFolderIds.has(id)
+      (id) => visibleFolderIds.has(id)
     );
 
     setExpandedItems((prev) => {

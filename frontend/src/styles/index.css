@@ -59,7 +59,8 @@ button {
   width: 100%;
   padding: 10px 15px;
   color: white;
-  background-color: var(--lightdark);
+  background-color: var(--dark);
+  border: 1px solid white;
   border-radius: 5px;
   outline: none;
   
@@ -125,4 +126,10 @@ input::file-selector-button {
 
 .dialog.reveal {
   z-index: 100;
+  scale: 1;
+  opacity:1;
+  animation: ease-in 1s open-dialog
 }
+
+
+

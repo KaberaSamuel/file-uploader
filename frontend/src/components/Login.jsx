@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
-import { useLoader } from "./LoadingContext";
 import { apiUrl, extractData } from "../../service";
-import Navbar from "./navbar";
+import Navbar from "./Navbar";
 import Loader from "./Loader";
 import "../styles/forms.css";
 
@@ -13,18 +12,18 @@ function Login() {
     password: "",
   });
   const { username, password } = formFields;
-
+  
   const [seePassword, setSeePassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const navigate = useNavigate();
   const { dataTree, setDataTree } = useAuth();
-  const { isLoading, setIsLoading } = useLoader();
+  const [isLoading, setIsLoading] = useState(false)
   const user = dataTree[0];
-
+  
   async function handleSubmit(e) {
     e.preventDefault();
-
+    
     // showing loading screen as we fetch data
     setIsLoading(true);
     const response = await fetch(`${apiUrl}/login`, {
@@ -42,7 +41,7 @@ function Login() {
     } else {
       const dataTree = await extractData(response);
       setDataTree(dataTree);
-
+      
       navigate("/folders").then(
         setTimeout(() => {
           setIsLoading(false);
@@ -51,12 +50,12 @@ function Login() {
     }
   }
 
+  // redirecting the user to the homepage if already authenticated
+  if (user) return <Navigate to="/folders" />;
+  
   if (isLoading) {
     return <Loader />;
   }
-
-  // redirecting the user to the homepage if already authenticated
-  if (user) return <Navigate to="/folders" />;
 
   return (
     <div>

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import "../styles/error-page.css";
+import "../styles/404.css"
 
 function NotFoundPage() {
   return (
-    <div className="internal-error error-page">
+    <div className="not-found">
       <h1>The page you're looking for isn't available</h1>
-      <Link to="/">Go to Homepage</Link>
+      <Link to="/folders">Go to Homepage</Link>
     </div>
   );
 }

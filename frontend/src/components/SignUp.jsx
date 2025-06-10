@@ -1,6 +1,6 @@
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Navbar from "./navbar";
+import Navbar from "./Navbar";
 import { useAuth } from "./AuthProvider";
 import { apiUrl } from "../../service";
 import "../styles/forms.css";
@@ -17,7 +17,8 @@ function SignUp() {
   const [seePassword, setSeePassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const { user } = useAuth();
+  const { dataTree } = useAuth();
+  const user = dataTree[0]
 
   // useEffect to checkpasswords
   useEffect(() => {
@@ -33,7 +34,7 @@ function SignUp() {
   }, [password1, password2]);
 
   // redirecting user to the homepage if already authenticated
-  if (user) return <Navigate to="/" />;
+  if (user) return <Navigate to="/folders" />;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -58,6 +59,7 @@ function SignUp() {
         <p>
           Already have an account ? <Link to="/login">Login</Link>
         </p>
+
         <form onSubmit={handleSubmit}>
           <div>
             <label> Username* </label>

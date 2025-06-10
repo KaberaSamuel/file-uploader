@@ -4,8 +4,7 @@ import {
   faChevronRight,
   faFile
 } from "@fortawesome/free-solid-svg-icons";
-import Loader from "./Loader";
-import { useParams, useNavigation, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import {
   getFilesInFolder,
   getFolderById,
@@ -68,6 +67,7 @@ function Items({ folders, files }) {
   }
 }
 
+
 function FolderView({ pathArray, folders, files }) {
   const lastIndex = pathArray.length - 1;
   return (
@@ -97,6 +97,7 @@ function FolderView({ pathArray, folders, files }) {
   );
 }
 
+// component for displaying other folders which are not user root folder
 function FolderItem() {
   let { id } = useParams();
   id = Number(id);
@@ -104,14 +105,7 @@ function FolderItem() {
   const { dataTree } = useAuth();
   const folder = getFolderById(id, dataTree);
   const pathArray = getPathArray(folder, dataTree);
-
-  const navigate = useNavigation();
-
   const childFiles = getFilesInFolder(id, dataTree);
-
-  if (navigate.state == "loading") {
-    return <Loader />;
-  }
 
   return (
     <FolderView
@@ -122,25 +116,14 @@ function FolderItem() {
   );
 }
 
-// default foitem for user data
+// component for displaying user root folder content
 function DefaultFolderItem() {
   const { dataTree } = useAuth();
   const user = dataTree[0];
-
   const pathArray = [{ name: user.name, id: 0 }];
-
-  const folders = user.children;
-
-  const navigate = useNavigation();
-
-  if (navigate.state == "loading") {
-    return <Loader />;
-  }
-
   const childFiles = getFilesInFolder(null, dataTree);
 
-
-  return <FolderView pathArray={pathArray} folders={folders} files={childFiles}/>;
+  return <FolderView pathArray={pathArray} folders={user.children} files={childFiles}/>;
 }
 
 export { DefaultFolderItem, FolderItem };

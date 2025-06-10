@@ -1,4 +1,4 @@
-.error-page a {
+.not-found a {
   margin-top: 20px;
   font-size: 1rem !important;
   padding: 10px 20px;
@@ -6,7 +6,7 @@
   border-radius: 20px;
 }
 
-.error-page {
+.not-found {
   width: 100vw;
   height: 100vh;
   font-size: 1.3rem;
