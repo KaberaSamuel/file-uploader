@@ -15,13 +15,14 @@ function SideBar({ dataTree, setActiveModal }) {
   const folderId = id ? Number(id) : 0;
 
   const [selectedItems, setSelectedItems] = useState([folderId]);
-  const [expandedItems, setExpandedItems] = useState([]);
-  const navigate = useNavigate();
-
+  const [expandedIds, setExpandedIds] = useState([]);
+  
   // current folder in view
   const folder = getFolderById(folderId, dataTree);
   const pathArray = getPathArray(folder, dataTree);
-  const expandedItemIds = pathArray.map((folder) => folder.id);
+  const defaultExpandedIds = pathArray.map((folder) => folder.id);
+
+  const navigate = useNavigate();
 
   function getItemLabel(item) {
     return item.name;
@@ -31,14 +32,21 @@ function SideBar({ dataTree, setActiveModal }) {
   useEffect(() => {
     setSelectedItems([folderId]);
 
-    // Only merge valid folders that still exist in the tree
+    // Only merge valid folders that still exist in the tree (i.e., remove deleted folders)
     const visibleFolderIds = new Set(getAllFolderIds(dataTree));
-    const validPathIds = expandedItemIds.filter(
+    const validExpandedIds = defaultExpandedIds.filter(
       (id) => visibleFolderIds.has(id)
     );
 
-    setExpandedItems((prev) => {
-      const merged = new Set([...prev, ...validPathIds]);
+    setExpandedIds((prev) => {
+      const currentId = validExpandedIds.at(-1)
+      const merged = new Set([...prev, ...validExpandedIds]);
+
+      // removing the currentId if it was already expanded
+      if (!expandedIds.includes(currentId)) {
+        merged.delete(currentId)
+      } 
+
       return Array.from(merged);
     });
   }, [folderId, dataTree]);
@@ -81,9 +89,9 @@ function SideBar({ dataTree, setActiveModal }) {
         getItemLabel={getItemLabel}
         selectedItems={selectedItems}
         onSelectedItemsChange={(event, ids) => setSelectedItems(ids)}
-        expandedItems={expandedItems}
-        onExpandedItemsChange={(event, ids) => setExpandedItems(ids)}
-        onItemClick={(e, id) => {
+        expandedItems={expandedIds}
+        onExpandedItemsChange={(event, ids) => setExpandedIds(ids)}
+        onItemClick={(e, id) => { 
           if (id === 0) {
             navigate("/folders");
           } else {
