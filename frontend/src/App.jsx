@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "./components/AuthProvider";
 import SideBar from "./components/Sidebar"
 import Modal from "./components/Modal";
+import FileInfo from "./components/FileInfo";
 import Navbar from "./components/Navbar";
 import "./styles/App.css";
 
@@ -14,6 +15,9 @@ function App() {
   const [activeModal, setActiveModal] = useState(null);
   const user = dataTree[0];
 
+  // active file variable
+  const [activeFile, setActiveFile] = useState(null)
+
   if (!user) {
     return <Navigate to="/login" />;
   }
@@ -24,8 +28,10 @@ function App() {
 
       <div className="dashboard">
         <SideBar dataTree={dataTree} setActiveModal={setActiveModal} />
-        <Outlet />
+        <Outlet context={{ activeFile, setActiveFile }} />
       </div>
+
+      <FileInfo activeFile={activeFile} setActiveFile={setActiveFile} />
 
       <Modal activeModal={activeModal} setActiveModal={setActiveModal} />
     </div>

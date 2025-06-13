@@ -11,6 +11,7 @@
   text-align: left;
 }
 
+/* folder page styles */
 .folder-content {
   padding: 17px;
 }
@@ -77,6 +78,7 @@
   transform: translateY(3px);
 }
 
+/* Modal styles */
 .modal form {
   display: flex;
   flex-direction: column;
@@ -119,6 +121,59 @@
   gap: 10px;
   justify-content: flex-end;
 }
+
+/* File page styles */
+.file-info {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  padding: 20px 30px 30px 20px;
+  background-color: var(--darkgray);
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.file-info .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 1.2rem;
+}
+
+.file-info .middle {
+  flex-grow: 1;
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-info .buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.file-info button {
+  border: 1px solid gray;
+  background-color: var(--lightdark);
+}
+
+.file-info .header, .file-info .middle span {
+  font-weight: 700;
+}
+
+.file-info-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: var(--backdrop-color);
+}
+
 
 /* CSS Loaders */
 .pending {

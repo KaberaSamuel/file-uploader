@@ -17,6 +17,7 @@
   --lightdark: rgb(24, 24, 28);
   --dark: rgb(15, 15, 15);
   --nav-height: 60px;
+  --backdrop-color:  rgba(10, 10, 10, 0.8);
 }
 
 body {
@@ -98,7 +99,7 @@ input::file-selector-button {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(10, 10, 10, 0.8);
+  background-color: var(--backdrop-color);
   z-index: 10;
 }
 

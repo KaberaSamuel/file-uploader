@@ -12,4 +12,5 @@
 ✔ Fix sidebar treeview expanding/collapsing issues
 ✔ animate modal box on open and close
 * Build side Modal for working with files
+    * Animate the modal
 

@@ -4,7 +4,7 @@ import {
   faChevronRight,
   faFile
 } from "@fortawesome/free-solid-svg-icons";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useOutletContext, Link } from "react-router-dom";
 import {
   getFilesInFolder,
   getFolderById,
@@ -12,7 +12,7 @@ import {
 } from "../../service.js";
 import { useAuth } from "./AuthProvider";
 
-function Items({ folders, files }) {
+function Items({ folders, files, setActiveFile }) {
   // if folder isn't empty
   if (folders.length > 0 || files.length > 0) {
     return (
@@ -23,7 +23,7 @@ function Items({ folders, files }) {
           <p>created</p>
         </li>
 
-        {/* Looping through folders and rendering them */}
+        {/* rendering child folders */}
         {folders.map(({ id, name, date }) => (
           <li key={id}>
             <Link to={`/folders/${id}`} className="item">
@@ -37,13 +37,14 @@ function Items({ folders, files }) {
           </li>
         ))}
 
-        {/* Looping through files and rendering them */}
-        {files.map(({ id, name, created_at, convertedSize }) => {
+        {/* rendering child files */}
+        {files.map((file) => {
+          const { id, name, created_at, convertedSize } = file
           let date = created_at.split(",").slice(0, -1)
           date = date.join(",")
           
           return (
-          <li key={id}>
+          <li key={id} onClick={() => {setActiveFile(file)}}>
               <div className="item">
                 <div className="label">
                   <FontAwesomeIcon className="icon" icon={faFile} />
@@ -68,7 +69,7 @@ function Items({ folders, files }) {
 }
 
 
-function FolderView({ pathArray, folders, files }) {
+function FolderView({ pathArray, folders, files, setActiveFile }) {
   const lastIndex = pathArray.length - 1;
   return (
     <div className="folder-content">
@@ -92,7 +93,7 @@ function FolderView({ pathArray, folders, files }) {
         })}
       </div>
 
-      <Items folders={folders} files={files}/>
+      <Items folders={folders} files={files} setActiveFile={setActiveFile}/>
     </div>
   );
 }
@@ -102,16 +103,20 @@ function FolderItem() {
   let { id } = useParams();
   id = Number(id);
 
+  
   const { dataTree } = useAuth();
   const folder = getFolderById(id, dataTree);
   const pathArray = getPathArray(folder, dataTree);
   const childFiles = getFilesInFolder(id, dataTree);
+  
+  const {setActiveFile} = useOutletContext()
 
   return (
     <FolderView
       pathArray={pathArray}
       folders={folder.children ? folder.children : []}
       files={childFiles}
+      setActiveFile={setActiveFile}
     />
   );
 }
@@ -122,8 +127,10 @@ function DefaultFolderItem() {
   const user = dataTree[0];
   const pathArray = [{ name: user.name, id: 0 }];
   const childFiles = getFilesInFolder(null, dataTree);
+  
+  const {setActiveFile} = useOutletContext()
 
-  return <FolderView pathArray={pathArray} folders={user.children} files={childFiles}/>;
+  return <FolderView pathArray={pathArray} folders={user.children} files={childFiles} setActiveFile={setActiveFile}/>;
 }
 
 export { DefaultFolderItem, FolderItem };
