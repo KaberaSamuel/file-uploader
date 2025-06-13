@@ -10,5 +10,6 @@
 ✔ Display files in a folder
 ✔ Replace useLoader context by individual loaders across routes
 ✔ Fix sidebar treeview expanding/collapsing issues
+✔ animate modal box on open and close
 * Build side Modal for working with files
 

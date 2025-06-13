@@ -96,40 +96,24 @@ input::file-selector-button {
 }
 
 .modal-backdrop {
-  display: none;
-}
-
-.modal-backdrop.reveal {
-  display: block;
   position: fixed;
   inset: 0;
   background-color: rgba(10, 10, 10, 0.8);
   z-index: 10;
 }
 
-.dialog {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  transform-origin: left top;
+.modal {
   width: 37vw;
-  min-height: 200px;
-  z-index: -100;
   padding: 30px;
   background-color: var(--darkgray);
   text-align: left;
   color: white;
+  z-index: 20;
   border-radius: 20px;
   border: 2px solid var(--lightblue);
 }
 
-.dialog.reveal {
-  z-index: 100;
-  scale: 1;
-  opacity:1;
-  animation: ease-in 1s open-dialog
-}
+
 
 
 

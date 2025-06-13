@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { useParams, useNavigate, Form } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion, spring } from "framer-motion";
 import { apiUrl, extractData, getFolderById } from "../../service";
 import { useAuth } from "./AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -112,7 +113,7 @@ function DeleteFolder({ setActiveModal }) {
     <form onSubmit={deleteFolder}>
       <div className="first">
         <p>Delete Folder</p>
-        <FontAwesomeIcon className="icon" icon={faXmark} />
+        <FontAwesomeIcon className="icon" icon={faXmark} onClick={() => {setActiveModal(null)}} />
       </div>
 
       <p>
@@ -220,14 +221,36 @@ function AddFile({ setActiveModal }) {
 
 function Modal({ activeModal, setActiveModal }) {
   return (
-    <div
-      className={activeModal ? "modal-backdrop reveal" : "modal-backdrop"}
+    <AnimatePresence>
+      {activeModal && <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{duration: 0.2}}
+
+      className="modal-backdrop reveal"
       onClick={() => {
         setActiveModal(null);
       }}
     >
-      <div
-        className={activeModal ? "reveal dialog" : "dialog"}
+      <motion.div
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: 0.5 }}
+        transition={{
+          type: "spring",
+          duration: 0.3
+        }}
+
+        style={{
+          position: 'fixed',
+          left: '50%',
+          top: '50%',
+          x: '-50%',
+          y: '-50%'
+        }}
+
+        className="modal"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -242,8 +265,9 @@ function Modal({ activeModal, setActiveModal }) {
         {activeModal === "upload-file" && (
           <AddFile setActiveModal={setActiveModal} />
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>}
+    </AnimatePresence>
   );
 }
 
