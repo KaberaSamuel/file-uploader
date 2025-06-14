@@ -22,12 +22,16 @@
 
 .links div:hover {
   color: var(--lightblue);
-  background-color: #3d98ff44;
+  background-color: var(--hover-bg);
   border: 1px solid var(--lightblue);
 }
 
 .tree-view svg {
   font-size: 1.4rem !important;
+}
+
+.tree-view .MuiTreeItem-content:hover {
+  color: var(--lightblue); 
 }
 
 .tree-view .Mui-selected {

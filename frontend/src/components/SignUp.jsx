@@ -55,12 +55,12 @@ function SignUp() {
       <Navbar />
 
       <main className="form-container">
-        <h1>Sign Up</h1>
-        <p>
-          Already have an account ? <Link to="/login">Login</Link>
-        </p>
-
         <form onSubmit={handleSubmit}>
+          <h1>Sign Up</h1>
+          <p>
+            Already have an account ? <Link to="/login">Login</Link>
+          </p>
+
           <div>
             <label> Username* </label>
             <input
