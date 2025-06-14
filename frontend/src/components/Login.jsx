@@ -62,11 +62,12 @@ function Login() {
       <Navbar />
 
       <main className="form-container login">
-        <h1>Login </h1>
-        <p>
-          Don't have an account yet ? <Link to="/signup">Sign Up</Link>
-        </p>
         <form onSubmit={handleSubmit}>
+          <h1>Login </h1>
+          <p>
+            Don't have an account yet ? <Link to="/signup">Sign Up</Link>
+          </p>
+
           <div>
             <label> Username* </label>
             <input
