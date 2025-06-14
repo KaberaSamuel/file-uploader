@@ -24,19 +24,14 @@ function Navbar() {
     }
   }
 
-  // when logged in
-  if (user)
-    return (
-      <nav>
+  return (
+    user ?  
+    <nav>
         <Link to="/folders">File Uploader</Link>
         <div onClick={logout}>
           <FontAwesomeIcon className="icon" icon={faArrowRightFromBracket} />
         </div>
-      </nav>
-    );
-
-  // when not logged in
-  return (
+    </nav> : 
     <nav>
       <div>
         <Link to="/folders">File Uploader</Link>

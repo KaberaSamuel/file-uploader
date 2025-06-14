@@ -11,6 +11,8 @@
   text-align: left;
 }
 
+
+
 /* folder page styles */
 .folder-content {
   padding: 17px;
@@ -38,6 +40,12 @@
   background-color: var(--lightdark);
   border: 1px solid gray;
   border-radius: 5px;
+}
+
+.folder-content li .item:hover {
+  color: var(--lightblue);
+  background-color: var(--hover-bg);
+  border: 1px solid var(--lightblue);
 }
 
 .folder-content li.header {
@@ -82,7 +90,7 @@
 .modal form {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 30px;
   width: 100%;
   height: 100%;
 }
@@ -114,6 +122,10 @@
   align-items: center;
   background-color: var(--lightblue);
   border: none;
+}
+
+.modal button:hover {
+  background-color: var(--lightgreen);
 }
 
 .modal .buttons {
@@ -159,13 +171,37 @@
   gap: 10px;
 }
 
+.file-info .buttons :last-child {
+  color: var(--dark);
+  background-color: var(--lightblue);
+  border: none;
+}
+
+.file-info .buttons :last-child:hover {
+  background-color: var(--lightgreen);
+}
+
 .file-info button {
   border: 1px solid gray;
   background-color: var(--lightdark);
 }
 
+.file-info button:hover {
+  color: var(--lightblue);
+  background-color: var(--hover-bg);
+  border: 1px solid var(--lightblue);
+}
+
 .file-info .header, .file-info .middle span {
   font-weight: 700;
+}
+
+.file-info .icon {
+  color: gray;
+}
+
+.file-info .icon:hover {
+  color: var(--lightblue);
 }
 
 .file-info-backdrop {
