@@ -75,8 +75,7 @@ async function getReadyFiles(fileRows) {
   for (const { id, url, parent_id } of fileRows) {
     const nameParts = url.split("/").toReversed()[0].split("-");
     const milliSecs = Number(nameParts[0]);
-    let fileName = nameParts[1];
-    fileName = fileName.replaceAll("%20", " ")
+    const fileName = decodeURIComponent(nameParts[1]);
 
     const response = await fetch(url);
     const blob = await response.blob();
@@ -85,8 +84,9 @@ async function getReadyFiles(fileRows) {
     // props for the ready file
     file.created_at = getDateString(milliSecs);
     file.convertedSize = getSize(file.size);
-    file.parent_id = parent_id
-    file.id = id
+    file.parent_id = parent_id;
+    file.id = id;
+    file.originalName = url.split("/").toReversed()[0];
     files.push(file);
   }
 

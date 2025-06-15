@@ -12,6 +12,7 @@ import {
   getFolders,
   getFiles,
   deleteFolder,
+  deleteFile,
   uploadFile,
 } from "./db.js";
 
@@ -32,7 +33,6 @@ function formatDate() {
   return date;
 }
 
-// function for getting a flat array of folder and its children
 function getFlatArray(folder) {
   const array = [];
 
@@ -147,6 +147,21 @@ api.post("/files", upload.single("file"), async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).end();
+  }
+});
+
+api.delete("/files", async (req, res, next) => {
+  try {
+    const { fileId, filename, userId } = req.body;
+    await deleteFile(fileId, filename);
+
+    const user = await getUserById(userId);
+    user.folders = await getFolders(userId);
+    user.files = await getFiles(userId);
+    res.json(user);
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 });
 

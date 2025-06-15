@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "./components/AuthProvider";
-import SideBar from "./components/Sidebar"
+import SideBar from "./components/Sidebar";
 import Modal from "./components/Modal";
 import FileInfo from "./components/FileInfo";
 import Navbar from "./components/Navbar";
@@ -16,7 +16,7 @@ function App() {
   const user = dataTree[0];
 
   // active file variable
-  const [activeFile, setActiveFile] = useState(null)
+  const [activeFile, setActiveFile] = useState(null);
 
   if (!user) {
     return <Navigate to="/login" />;

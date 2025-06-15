@@ -113,7 +113,13 @@ function DeleteFolder({ setActiveModal }) {
     <form onSubmit={deleteFolder}>
       <div className="first">
         <p>Delete Folder</p>
-        <FontAwesomeIcon className="icon" icon={faXmark} onClick={() => {setActiveModal(null)}} />
+        <FontAwesomeIcon
+          className="icon"
+          icon={faXmark}
+          onClick={() => {
+            setActiveModal(null);
+          }}
+        />
       </div>
 
       <p>
@@ -205,7 +211,11 @@ function AddFile({ setActiveModal }) {
       </div>
 
       <div>
-        <input type="file" accept=".txt,.doc,.docx,.pdf,.rtf,.png,.jpg,.jpeg,.mp3" onChange={onFileChange} />
+        <input
+          type="file"
+          accept=".txt,.doc,.docx,.pdf,.rtf,.png,.jpg,.jpeg,.mp3"
+          onChange={onFileChange}
+        />
       </div>
 
       {pending ? (
@@ -222,51 +232,50 @@ function AddFile({ setActiveModal }) {
 function Modal({ activeModal, setActiveModal }) {
   return (
     <AnimatePresence>
-      {activeModal && <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{duration: 0.2}}
+      {activeModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="modal-backdrop reveal"
+          onClick={() => {
+            setActiveModal(null);
+          }}
+        >
+          <motion.div
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.5 }}
+            transition={{
+              type: "spring",
+              duration: 0.3,
+            }}
+            style={{
+              position: "fixed",
+              left: "50%",
+              top: "50%",
+              x: "-50%",
+              y: "-50%",
+            }}
+            className="modal"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            {activeModal === "create" && (
+              <CreateFolder setActiveModal={setActiveModal} />
+            )}
+            {activeModal === "delete" && (
+              <DeleteFolder setActiveModal={setActiveModal} />
+            )}
 
-      className="modal-backdrop reveal"
-      onClick={() => {
-        setActiveModal(null);
-      }}
-    >
-      <motion.div
-        initial={{ scale: 0.8 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 0.5 }}
-        transition={{
-          type: "spring",
-          duration: 0.3
-        }}
-
-        style={{
-          position: 'fixed',
-          left: '50%',
-          top: '50%',
-          x: '-50%',
-          y: '-50%'
-        }}
-
-        className="modal"
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        {activeModal === "create" && (
-          <CreateFolder setActiveModal={setActiveModal} />
-        )}
-        {activeModal === "delete" && (
-          <DeleteFolder setActiveModal={setActiveModal} />
-        )}
-
-        {activeModal === "upload-file" && (
-          <AddFile setActiveModal={setActiveModal} />
-        )}
-      </motion.div>
-    </motion.div>}
+            {activeModal === "upload-file" && (
+              <AddFile setActiveModal={setActiveModal} />
+            )}
+          </motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }

@@ -11,6 +11,6 @@
 ✔ Replace useLoader context by individual loaders across routes
 ✔ Fix sidebar treeview expanding/collapsing issues
 ✔ animate modal box on open and close
-* Build side Modal for working with files
-    * Animate the modal
-
+✔ Animate file info box presence
+✔ Delete file functionality
+* Share file functionality
