@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { apiUrl, extractData, getFolderById } from "../../service";
@@ -110,7 +110,11 @@ function DeleteFolder({ setActiveModal }) {
   }
 
   return (
-    <form onSubmit={deleteFolder}>
+    <form
+      onSubmit={deleteFolder}
+      className="delete-folder"
+      style={{ lineHeight: "2rem", fontSize: "1.1rem" }}
+    >
       <div className="first">
         <p>Delete Folder</p>
         <FontAwesomeIcon
@@ -229,7 +233,182 @@ function AddFile({ setActiveModal }) {
   );
 }
 
-function Modal({ activeModal, setActiveModal }) {
+function ShareLink({ activeFile, activeLink, setActiveLink, setActiveModal }) {
+  const listRef = useRef(null);
+  const [pending, setPending] = useState(false);
+  const [link, setLink] = useState(null);
+  const [copied, setCopied] = useState(false);
+
+  let linkButton;
+  if (pending) {
+    linkButton = (
+      <button>
+        <div className="pending"></div>
+      </button>
+    );
+  } else if (link) {
+    if (copied) {
+      linkButton = <button>Copied</button>;
+    } else {
+      linkButton = (
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(link);
+            setCopied(true);
+          }}
+        >
+          Copy
+        </button>
+      );
+    }
+  } else {
+    linkButton = (
+      <button
+        className="Generate Link"
+        onClick={() => {
+          generateLink();
+        }}
+      >
+        Generate Link
+      </button>
+    );
+  }
+
+  function updateButtons() {
+    const listNode = listRef.current;
+    const allNodes = listNode.querySelectorAll("p");
+
+    allNodes.forEach((element, index) => {
+      if (index === activeLink) {
+        element.classList.add("active");
+      } else {
+        element.classList.remove("active");
+      }
+    });
+  }
+
+  async function generateLink() {
+    setPending(true);
+    let duration;
+
+    if (activeLink == 0) {
+      // 1 hour
+      duration = 3600;
+    } else if (activeLink == 1) {
+      // 4 hours
+      duration = 3600 * 4;
+    } else if (activeLink == 3) {
+      // 3 days
+      duration = 3 * 24 * 3600;
+    } else if (activeLink == 4) {
+      duration = 7 * 24 * 3600;
+    } else {
+      // 1 day
+      duration = 24 * 3600;
+    }
+
+    const response = await fetch(`${apiUrl}/share-link`, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "file",
+        item: activeFile.originalName,
+        duration: duration,
+      }),
+      credentials: "include",
+    });
+
+    const url = await response.json();
+    setLink(url);
+    setPending(false);
+  }
+
+  useEffect(() => {
+    updateButtons();
+  }, [activeLink]);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+      <div className="first">
+        <p>New File</p>
+        <FontAwesomeIcon
+          className="icon"
+          icon={faXmark}
+          onClick={() => {
+            setActiveModal(null);
+          }}
+        />
+      </div>
+
+      <p>Generate a public link to share the selected file</p>
+
+      <div className="links-duration">
+        <h1>Duration</h1>
+
+        <div className="durations" ref={listRef}>
+          <p
+            onClick={() => {
+              setActiveLink(0);
+            }}
+          >
+            1 hour
+          </p>
+          <p
+            onClick={() => {
+              setActiveLink(1);
+            }}
+          >
+            4 hour
+          </p>
+          <p
+            onClick={() => {
+              setActiveLink(2);
+            }}
+          >
+            1 day
+          </p>
+          <p
+            onClick={() => {
+              setActiveLink(3);
+            }}
+          >
+            3 days
+          </p>
+          <p
+            onClick={() => {
+              setActiveLink(4);
+            }}
+          >
+            1 week
+          </p>
+        </div>
+
+        <p>Links will expire after the specified duration</p>
+
+        {link && <input value={link} readOnly />}
+      </div>
+
+      <div className="buttons">
+        <button
+          type="button"
+          className="cancel"
+          onClick={() => setActiveModal(null)}
+        >
+          Cancel
+        </button>
+        {linkButton}
+      </div>
+    </div>
+  );
+}
+
+function Modal({
+  activeFile,
+  activeLink,
+  activeModal,
+  setActiveLink,
+  setActiveModal,
+}) {
   return (
     <AnimatePresence>
       {activeModal && (
@@ -244,12 +423,11 @@ function Modal({ activeModal, setActiveModal }) {
           }}
         >
           <motion.div
-            initial={{ scale: 0.8 }}
+            initial={{ scale: 0.5 }}
             animate={{ scale: 1 }}
             exit={{ scale: 0.5 }}
             transition={{
-              type: "spring",
-              duration: 0.3,
+              duration: 0.2,
             }}
             style={{
               position: "fixed",
@@ -272,6 +450,15 @@ function Modal({ activeModal, setActiveModal }) {
 
             {activeModal === "upload-file" && (
               <AddFile setActiveModal={setActiveModal} />
+            )}
+
+            {activeModal === "share-link" && (
+              <ShareLink
+                activeFile={activeFile}
+                activeLink={activeLink}
+                setActiveLink={setActiveLink}
+                setActiveModal={setActiveModal}
+              />
             )}
           </motion.div>
         </motion.div>

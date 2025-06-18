@@ -1,5 +1,5 @@
+import { act, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useState } from "react";
 import { useAuth } from "./components/AuthProvider";
 import SideBar from "./components/Sidebar";
 import Modal from "./components/Modal";
@@ -8,15 +8,14 @@ import Navbar from "./components/Navbar";
 import "./styles/App.css";
 
 function App() {
-  // starting data
+  // initial app data
   const { dataTree } = useAuth();
-
-  // modal's variables
-  const [activeModal, setActiveModal] = useState(null);
   const user = dataTree[0];
 
-  // active file variable
+  // initializing app variables
+  const [activeModal, setActiveModal] = useState(null);
   const [activeFile, setActiveFile] = useState(null);
+  const [activeLink, setActiveLink] = useState(2);
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -31,9 +30,19 @@ function App() {
         <Outlet context={{ activeFile, setActiveFile }} />
       </div>
 
-      <FileInfo activeFile={activeFile} setActiveFile={setActiveFile} />
+      <FileInfo
+        activeFile={activeFile}
+        setActiveFile={setActiveFile}
+        setActiveModal={setActiveModal}
+      />
 
-      <Modal activeModal={activeModal} setActiveModal={setActiveModal} />
+      <Modal
+        activeFile={activeFile}
+        activeLink={activeLink}
+        setActiveLink={setActiveLink}
+        activeModal={activeModal}
+        setActiveModal={setActiveModal}
+      />
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   getUserById,
   getFolders,
   getFiles,
+  generateFileLink,
   deleteFolder,
   deleteFile,
   uploadFile,
@@ -197,6 +198,16 @@ api.post("/login", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+api.post("/share-link", async (req, res) => {
+  const { type, item, duration } = req.body;
+  let shareLink;
+  if (type == "file") {
+    const data = await generateFileLink(item, duration);
+    shareLink = data.signedUrl;
+  }
+  res.json(shareLink);
 });
 
 api.post("/register", async (req, res, next) => {

@@ -8,16 +8,16 @@
   --sfs: 0.8rem;
   --fs: 1rem;
   --lfs: 1.7rem;
-  --darkgray:rgb(50, 50, 60);
-  --white:rgb(255, 255, 255);
-  --lightwhite:rgb(172, 172, 172);
-  --lightblue:rgb(69, 199, 255);
+  --darkgray: rgb(50, 50, 60);
+  --white: rgb(255, 255, 255);
+  --lightwhite: rgb(172, 172, 172);
+  --lightblue: rgb(69, 199, 255);
   --lightblue2: rgb(65, 113, 150);
-  --lightgreen:rgb(60, 250, 185);
+  --lightgreen: rgb(60, 250, 185);
   --lightdark: rgb(24, 24, 28);
   --dark: rgb(15, 15, 15);
   --nav-height: 65px;
-  --backdrop-color:  rgba(10, 10, 10, 0.8);
+  --backdrop-color: rgba(10, 10, 10, 0.8);
   --hover-bg: rgba(60, 190, 255, 0.25);
 }
 
@@ -62,18 +62,16 @@ nav .icon:hover {
   color: var(--lightblue);
 }
 
-
 input,
 button {
   margin-top: 8px;
   width: 100%;
-  padding:11px 15px;
+  padding: 11px 15px;
   color: white;
   background-color: var(--lightdark);
   border: 1px solid white;
   border-radius: 5px;
   outline: none;
-  
 }
 
 button {
@@ -92,7 +90,6 @@ input[type="file"] {
   font-size: 1.05rem;
 }
 
-
 input::file-selector-button {
   padding: 10px 20px;
   background-color: var(--lightdark);
@@ -110,7 +107,8 @@ input::file-selector-button {
 }
 
 .modal {
-  width: 35vw;
+  font-size: 1.1rem;
+  width: 500px;
   padding: 30px;
   background-color: var(--darkgray);
   text-align: left;
@@ -118,10 +116,4 @@ input::file-selector-button {
   z-index: 20;
   border-radius: 20px;
   border: 2px solid var(--lightblue);
-  
 }
-
-
-
-
-

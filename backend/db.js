@@ -98,6 +98,14 @@ async function getFiles(userId) {
   return data;
 }
 
+async function generateFileLink(filename, duration) {
+  const { data } = await supabase.storage
+    .from("files")
+    .createSignedUrl(filename, duration);
+
+  return data;
+}
+
 async function deleteFolder(removables) {
   for (const folder of removables) {
     // deleting files in the folder
@@ -166,6 +174,7 @@ export {
   getFolders,
   getFiles,
   getAllUsers,
+  generateFileLink,
   deleteFolder,
   deleteFile,
   uploadFile,

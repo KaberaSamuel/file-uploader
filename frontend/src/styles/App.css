@@ -82,7 +82,7 @@
 }
 
 /* Modal styles */
-.modal form {
+.modal > :first-child {
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -94,6 +94,7 @@
   display: flex;
   justify-content: space-between;
   font-weight: 700;
+  font-size: 1.2rem;
 }
 
 .modal .first .icon {
@@ -108,13 +109,9 @@
 .modal button {
   color: var(--darkgray);
   font-weight: 600;
-  padding: 0;
+  padding: 10px 20px;
   align-self: flex-end;
-  width: 120px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-width: 70px;
   background-color: var(--lightblue);
   border: none;
 }
@@ -129,13 +126,56 @@
   justify-content: flex-end;
 }
 
+.modal .buttons .cancel {
+  background-color: var(--dark);
+  color: white;
+  border: 1px solid gray;
+}
+
+.modal .links-duration {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal .links-duration h1 {
+  font-size: 1.2rem;
+}
+
+.modal .links-duration .durations {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid gray;
+}
+
+.modal .links-duration .durations > * {
+  flex: 1 1 auto;
+  font-size: 1rem;
+  padding: 10px 15px;
+  border-right: 1px solid gray;
+}
+
+.modal .links-duration .durations .active,
+.modal .links-duration .durations :hover {
+  background-color: var(--lightblue);
+  color: var(--dark);
+}
+
+/* .modal .links-duration .durations{} */
+
+.modal .links-duration .durations > :last-child {
+  border: none;
+}
+
 /* File page styles */
 .file-info {
   position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
-  padding: 20px 30px 30px 20px;
+  width: 400px;
+  padding: 20px;
   background-color: var(--darkgray);
   text-align: left;
 
@@ -163,6 +203,8 @@
 
 .file-info .buttons {
   display: flex;
+  width: 100%;
+  justify-content: center;
   gap: 10px;
 }
 
