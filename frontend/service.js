@@ -73,9 +73,9 @@ async function getReadyFiles(fileRows) {
   const files = [];
 
   for (const { id, url, parent_id } of fileRows) {
-    const nameParts = url.split("/").toReversed()[0].split("-");
-    const milliSecs = Number(nameParts[0]);
-    const fileName = decodeURIComponent(nameParts[1]);
+    const [time, ...nameParts] = url.split("/").toReversed()[0].split("-");
+    const milliSecs = Number(time);
+    const fileName = decodeURIComponent(nameParts.join("-"));
 
     const response = await fetch(url);
     const blob = await response.blob();

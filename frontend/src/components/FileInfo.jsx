@@ -8,6 +8,7 @@ import { extractData, apiUrl } from "../../service";
 
 function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const { dataTree, setDataTree } = useAuth();
 
   async function deleteFile(e) {
@@ -31,6 +32,29 @@ function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
     setIsDeleting(false);
     setDataTree(newDataTree);
     setActiveFile(null);
+  }
+
+  async function downloadFile() {
+    setIsDownloading(true);
+    const response = await fetch(`${apiUrl}/download`, {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        filename: activeFile.originalName,
+      }),
+    });
+
+    // download file
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = activeFile.originalName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+    setIsDownloading(false);
   }
 
   return (
@@ -98,7 +122,13 @@ function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
                 </button>
               )}
 
-              <button>Download</button>
+              {isDownloading ? (
+                <button>
+                  <div className="pending"></div>
+                </button>
+              ) : (
+                <button onClick={downloadFile}>Download</button>
+              )}
             </div>
           </motion.div>
         </div>

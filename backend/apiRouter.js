@@ -12,6 +12,7 @@ import {
   getFolders,
   getFiles,
   generateFileLink,
+  downloadFile,
   deleteFolder,
   deleteFile,
   uploadFile,
@@ -208,6 +209,13 @@ api.post("/share-link", async (req, res) => {
     shareLink = data.signedUrl;
   }
   res.json(shareLink);
+});
+
+api.post("/download", async (req, res) => {
+  const { filename } = req.body;
+  const data = await downloadFile(filename);
+  const buffer = await data.arrayBuffer();
+  res.end(Buffer.from(buffer));
 });
 
 api.post("/register", async (req, res, next) => {
