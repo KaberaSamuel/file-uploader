@@ -6,17 +6,18 @@ import {
   faFolderPlus,
   faFileCirclePlus,
   faTrashCan,
+  faShareNodes,
 } from "@fortawesome/free-solid-svg-icons";
 import { getFolderById, getAllFolderIds, getPathArray } from "../../service";
 import "../styles/sidebar.css";
 
-function SideBar({ dataTree, setActiveModal }) {
+function SideBar({ dataTree, setActiveModal, setShareItem }) {
   const { id } = useParams();
   const folderId = id ? Number(id) : 0;
 
   const [selectedItems, setSelectedItems] = useState([folderId]);
   const [expandedIds, setExpandedIds] = useState([]);
-  
+
   // current folder in view
   const folder = getFolderById(folderId, dataTree);
   const pathArray = getPathArray(folder, dataTree);
@@ -34,18 +35,18 @@ function SideBar({ dataTree, setActiveModal }) {
 
     // Only merge valid folders that still exist in the tree (i.e., remove deleted folders)
     const visibleFolderIds = new Set(getAllFolderIds(dataTree));
-    const validExpandedIds = defaultExpandedIds.filter(
-      (id) => visibleFolderIds.has(id)
+    const validExpandedIds = defaultExpandedIds.filter((id) =>
+      visibleFolderIds.has(id)
     );
 
     setExpandedIds((prev) => {
-      const currentId = validExpandedIds.at(-1)
+      const currentId = validExpandedIds.at(-1);
       const merged = new Set([...prev, ...validExpandedIds]);
 
       // removing the currentId if it was already expanded
       if (!expandedIds.includes(currentId)) {
-        merged.delete(currentId)
-      } 
+        merged.delete(currentId);
+      }
 
       return Array.from(merged);
     });
@@ -75,6 +76,18 @@ function SideBar({ dataTree, setActiveModal }) {
         {id && (
           <div
             onClick={() => {
+              setShareItem({ type: "folder", data: folder });
+              setActiveModal("share-link");
+            }}
+          >
+            <FontAwesomeIcon className="icon" icon={faShareNodes} />
+            <p>Share Folder</p>
+          </div>
+        )}
+
+        {id && (
+          <div
+            onClick={() => {
               setActiveModal("delete");
             }}
           >
@@ -91,7 +104,7 @@ function SideBar({ dataTree, setActiveModal }) {
         onSelectedItemsChange={(event, ids) => setSelectedItems(ids)}
         expandedItems={expandedIds}
         onExpandedItemsChange={(event, ids) => setExpandedIds(ids)}
-        onItemClick={(e, id) => { 
+        onItemClick={(e, id) => {
           if (id === 0) {
             navigate("/folders");
           } else {

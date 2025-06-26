@@ -1,7 +1,8 @@
 import { Router } from "express";
-import bcrypt from "bcrypt";
 import { decode } from "base64-arraybuffer";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import Hashids from "hashids";
 
 import {
   insertIntoUsers,
@@ -18,11 +19,12 @@ import {
   uploadFile,
 } from "./db.js";
 
-import { jwtSecret } from "./config/envConfig.js";
 import upload from "./config/multerConfig.js";
+import { jwtSecret, nodeSalt, frontendURL } from "./config/envConfig.js";
 import "./config/passportConfig.js";
 
 const api = Router();
+const hashids = new Hashids(nodeSalt, 15);
 
 function formatDate() {
   const time = Date.now();
@@ -167,6 +169,29 @@ api.delete("/files", async (req, res, next) => {
   }
 });
 
+api.post("/share-link", async (req, res) => {
+  const { shareItem, duration } = req.body;
+  let shareLink;
+  if (shareItem.type == "file") {
+    const data = await generateFileLink(shareItem.data.originalName, duration);
+    shareLink = data.signedUrl;
+  } else {
+    // logic to share folder
+    const hashedId = hashids.encode(shareItem.data.id);
+    // expiring time in hours
+    const expire = ((Date.now() + duration) / 3600).toFixed(2);
+    shareLink = `${frontendURL}/public/${hashedId}?expire=${expire}`;
+  }
+  res.json(shareLink);
+});
+
+api.post("/download", async (req, res) => {
+  const { filename } = req.body;
+  const data = await downloadFile(filename);
+  const buffer = await data.arrayBuffer();
+  res.end(Buffer.from(buffer));
+});
+
 api.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -199,23 +224,6 @@ api.post("/login", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-});
-
-api.post("/share-link", async (req, res) => {
-  const { type, item, duration } = req.body;
-  let shareLink;
-  if (type == "file") {
-    const data = await generateFileLink(item, duration);
-    shareLink = data.signedUrl;
-  }
-  res.json(shareLink);
-});
-
-api.post("/download", async (req, res) => {
-  const { filename } = req.body;
-  const data = await downloadFile(filename);
-  const buffer = await data.arrayBuffer();
-  res.end(Buffer.from(buffer));
 });
 
 api.post("/register", async (req, res, next) => {

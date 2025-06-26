@@ -6,7 +6,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "./AuthProvider";
 import { extractData, apiUrl } from "../../service";
 
-function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
+function FileInfo({ activeFile, setActiveFile, setActiveModal, setShareItem }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const { dataTree, setDataTree } = useAuth();
@@ -108,7 +108,12 @@ function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
                 Close
               </button>
 
-              <button onClick={() => setActiveModal("share-link")}>
+              <button
+                onClick={() => {
+                  setShareItem({ type: "file", data: activeFile });
+                  setActiveModal("share-link");
+                }}
+              >
                 Share
               </button>
 

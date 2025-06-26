@@ -2,15 +2,9 @@ import express from "express";
 import cors from "cors";
 import api from "./apiRouter.js";
 import cookieParser from "cookie-parser";
-import { nodeEnv } from "./config/envConfig.js";
+import { frontendURL } from "./config/envConfig.js";
 
 const app = express();
-
-let frontendURL = "https://file-uploader-frontend-m9a9.onrender.com";
-
-if (nodeEnv === "development") {
-  frontendURL = "http://localhost:5173";
-}
 
 app.use(
   cors({

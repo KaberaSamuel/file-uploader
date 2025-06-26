@@ -16,6 +16,7 @@ function App() {
   const [activeModal, setActiveModal] = useState(null);
   const [activeFile, setActiveFile] = useState(null);
   const [activeLink, setActiveLink] = useState(2);
+  const [shareItem, setShareItem] = useState(null);
 
   if (!user) {
     return <Navigate to="/login" />;
@@ -26,7 +27,11 @@ function App() {
       <Navbar />
 
       <div className="dashboard">
-        <SideBar dataTree={dataTree} setActiveModal={setActiveModal} />
+        <SideBar
+          dataTree={dataTree}
+          setActiveModal={setActiveModal}
+          setShareItem={setShareItem}
+        />
         <Outlet context={{ activeFile, setActiveFile }} />
       </div>
 
@@ -34,13 +39,15 @@ function App() {
         activeFile={activeFile}
         setActiveFile={setActiveFile}
         setActiveModal={setActiveModal}
+        setShareItem={setShareItem}
       />
 
       <Modal
         activeFile={activeFile}
         activeLink={activeLink}
-        setActiveLink={setActiveLink}
         activeModal={activeModal}
+        shareItem={shareItem}
+        setActiveLink={setActiveLink}
         setActiveModal={setActiveModal}
       />
     </div>

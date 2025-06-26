@@ -233,7 +233,7 @@ function AddFile({ setActiveModal }) {
   );
 }
 
-function ShareLink({ activeFile, activeLink, setActiveLink, setActiveModal }) {
+function ShareLink({ shareItem, activeLink, setActiveLink, setActiveModal }) {
   const listRef = useRef(null);
   const [pending, setPending] = useState(false);
   const [link, setLink] = useState(null);
@@ -311,14 +311,14 @@ function ShareLink({ activeFile, activeLink, setActiveLink, setActiveModal }) {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        type: "file",
-        item: activeFile.originalName,
+        shareItem,
         duration: duration,
       }),
       credentials: "include",
     });
 
     const url = await response.json();
+    alert(url);
     setLink(url);
     setPending(false);
   }
@@ -403,7 +403,7 @@ function ShareLink({ activeFile, activeLink, setActiveLink, setActiveModal }) {
 }
 
 function Modal({
-  activeFile,
+  shareItem,
   activeLink,
   activeModal,
   setActiveLink,
@@ -454,7 +454,7 @@ function Modal({
 
             {activeModal === "share-link" && (
               <ShareLink
-                activeFile={activeFile}
+                shareItem={shareItem}
                 activeLink={activeLink}
                 setActiveLink={setActiveLink}
                 setActiveModal={setActiveModal}
