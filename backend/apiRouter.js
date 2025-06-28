@@ -51,7 +51,6 @@ function getFlatArray(folder) {
   }
 
   buildArray(folder);
-
   return array;
 }
 

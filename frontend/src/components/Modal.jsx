@@ -318,7 +318,6 @@ function ShareLink({ shareItem, activeLink, setActiveLink, setActiveModal }) {
     });
 
     const url = await response.json();
-    alert(url);
     setLink(url);
     setPending(false);
   }

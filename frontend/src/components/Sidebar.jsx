@@ -9,9 +9,14 @@ import {
   faShareNodes,
 } from "@fortawesome/free-solid-svg-icons";
 import { getFolderById, getAllFolderIds, getPathArray } from "../../service";
+import { useAuth } from "./AuthProvider";
 import "../styles/sidebar.css";
 
-function SideBar({ dataTree, setActiveModal, setShareItem }) {
+function SideBar({ setActiveModal, setShareItem }) {
+  const isPublic = window.location.pathname.includes("public");
+
+  // id of current folder
+  const { dataTree } = useAuth();
   const { id } = useParams();
   const folderId = id ? Number(id) : 0;
 

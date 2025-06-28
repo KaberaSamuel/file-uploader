@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "./AuthProvider.jsx";
 import { apiUrl } from "../../service.js";
 
@@ -8,6 +8,7 @@ function Navbar() {
   const { dataTree, setDataTree } = useAuth();
   const user = dataTree[0];
   const navigate = useNavigate();
+  const isPublic = window.location.pathname.includes("public");
 
   async function logout() {
     const response = await fetch(`${apiUrl}/logout`, {
@@ -24,14 +25,14 @@ function Navbar() {
     }
   }
 
-  return (
-    user ?  
+  return user || isPublic ? (
     <nav>
-        <Link to="/folders">File Uploader</Link>
-        <div onClick={logout}>
-          <FontAwesomeIcon className="icon" icon={faArrowRightFromBracket} />
-        </div>
-    </nav> : 
+      <Link to="/folders">File Uploader</Link>
+      <div onClick={logout}>
+        <FontAwesomeIcon className="icon" icon={faArrowRightFromBracket} />
+      </div>
+    </nav>
+  ) : (
     <nav>
       <div>
         <Link to="/folders">File Uploader</Link>

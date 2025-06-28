@@ -1,13 +1,13 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { apiUrl, extractData } from "../../service";
 import Loader from "./Loader";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const [dataTree, setDataTree] = useState([null]);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  console.log(window.location.pathname);
 
   useEffect(() => {
     (async function () {
@@ -21,17 +21,17 @@ function AuthProvider({ children }) {
 
       const userDataTree = await extractData(response);
       setDataTree(userDataTree);
-      setIsLoading(false)
+      setIsLoading(false);
     })();
   }, []);
 
   if (isLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   return (
-    <AuthContext.Provider value={{ dataTree, setDataTree }}
-    >  {children}
+    <AuthContext.Provider value={{ dataTree, setDataTree }}>
+      {children}
     </AuthContext.Provider>
   );
 }

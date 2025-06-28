@@ -7,6 +7,7 @@ import App from "./App.jsx";
 import Login from "./components/Login.jsx";
 import SignUp from "./components/SignUp.jsx";
 import NotFoundPage from "./components/NotFound.jsx";
+import PublicFolder from "./components/PublicFolder.jsx";
 import { FolderItem, DefaultFolderItem } from "./components/FolderItem.jsx";
 import "./styles/index.css";
 
@@ -33,13 +34,14 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <SignUp />,
   },
+  { path: "/public/:hashedUrl", element: <PublicFolder /> },
   { path: "*", element: <NotFoundPage /> },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );

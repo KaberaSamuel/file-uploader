@@ -9,8 +9,9 @@ import "./styles/App.css";
 
 function App() {
   // initial app data
-  const { dataTree } = useAuth();
-  const user = dataTree[0];
+  const {
+    dataTree: [user],
+  } = useAuth();
 
   // initializing app variables
   const [activeModal, setActiveModal] = useState(null);
@@ -27,11 +28,7 @@ function App() {
       <Navbar />
 
       <div className="dashboard">
-        <SideBar
-          dataTree={dataTree}
-          setActiveModal={setActiveModal}
-          setShareItem={setShareItem}
-        />
+        <SideBar setActiveModal={setActiveModal} setShareItem={setShareItem} />
         <Outlet context={{ activeFile, setActiveFile }} />
       </div>
 
