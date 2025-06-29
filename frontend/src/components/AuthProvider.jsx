@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect, useContext } from "react";
 import { apiUrl, extractData } from "../../service";
 import Loader from "./Loader";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const AuthContext = createContext();
 

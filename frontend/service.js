@@ -1,5 +1,4 @@
-// const apiUrl = "https://file-uploader-xctw.onrender.com";
-const apiUrl = "http://localhost:3000";
+const apiUrl = "https://file-uploader-xctw.onrender.com";
 
 function getDateString(milliSecs) {
   const date = new Date(milliSecs);
@@ -163,7 +162,7 @@ function createDataTree(user) {
 // function to extract data from server response and create data tree
 async function extractData(response) {
   try {
-    // when logged in
+    // when logged not logged in
     if (!response.ok) return [null];
 
     const user = await response.json();
@@ -171,7 +170,6 @@ async function extractData(response) {
     const dataTree = createDataTree(user);
     return dataTree;
   } catch (error) {
-    // when not logged
     console.log(error);
     return [null];
   }

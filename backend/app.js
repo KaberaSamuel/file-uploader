@@ -6,15 +6,14 @@ import { nodeEnv } from "./config/envConfig.js";
 
 const app = express();
 
-let frontendURL = "https://file-uploader-frontend-m9a9.onrender.com";
-
-if (nodeEnv === "development") {
-  frontendURL = "http://localhost:5173";
-}
+const frontendUrl =
+  nodeEnv === "production"
+    ? "https://file-uploader-1cpl.onrender.com"
+    : "http://localhost:5173";
 
 app.use(
   cors({
-    origin: frontendURL,
+    origin: frontendUrl,
     credentials: true,
   })
 );
