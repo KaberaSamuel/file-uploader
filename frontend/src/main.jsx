@@ -1,6 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 
 import AuthProvider from "./components/AuthProvider.jsx";
 import App from "./App.jsx";
@@ -11,6 +15,10 @@ import { FolderItem, DefaultFolderItem } from "./components/FolderItem.jsx";
 import "./styles/index.css";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Navigate to="/folders" replace />,
+  },
   {
     path: "/folders",
     element: <App />,
@@ -38,8 +46,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-      <AuthProvider>
-        <RouterProvider router={router} />
-      </AuthProvider>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );

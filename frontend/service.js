@@ -1,5 +1,4 @@
-// const apiUrl = "https://file-uploader-xctw.onrender.com";
-const apiUrl = "http://localhost:3000";
+const apiUrl = "https://file-uploader-xctw.onrender.com";
 
 function getDateString(milliSecs) {
   const date = new Date(milliSecs);
