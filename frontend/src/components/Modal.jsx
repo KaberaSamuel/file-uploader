@@ -5,6 +5,7 @@ import { apiUrl, extractData, getFolderById } from "../../service";
 import { useAuth } from "./AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import LoaderButton from "./LoaderButton";
 
 function CreateFolder({ setActiveModal }) {
   const { id } = useParams();
@@ -62,13 +63,9 @@ function CreateFolder({ setActiveModal }) {
         />
       </div>
 
-      {pending ? (
-        <button disabled>
-          <div className="pending"></div>
-        </button>
-      ) : (
+      <LoaderButton pending={pending}>
         <button type="submit">Create Folder</button>
-      )}
+      </LoaderButton>
     </form>
   );
 }
@@ -140,15 +137,9 @@ function DeleteFolder({ setActiveModal }) {
           Cancel
         </button>
 
-        {pending ? (
-          <button>
-            <div className="pending"></div>
-          </button>
-        ) : (
-          <button className="delete" type="submit">
-            Delete
-          </button>
-        )}
+        <LoaderButton pending={pending}>
+          <button type="submit">Delete</button>
+        </LoaderButton>
       </div>
     </form>
   );
@@ -221,14 +212,9 @@ function AddFile({ setActiveModal }) {
           onChange={onFileChange}
         />
       </div>
-
-      {pending ? (
-        <button disabled>
-          <div className="pending"></div>
-        </button>
-      ) : (
+      <LoaderButton pending={pending}>
         <button type="submit">Upload</button>
-      )}
+      </LoaderButton>
     </form>
   );
 }
@@ -240,13 +226,7 @@ function ShareLink({ activeFile, activeLink, setActiveLink, setActiveModal }) {
   const [copied, setCopied] = useState(false);
 
   let linkButton;
-  if (pending) {
-    linkButton = (
-      <button>
-        <div className="pending"></div>
-      </button>
-    );
-  } else if (link) {
+  if (link) {
     if (copied) {
       linkButton = <button>Copied</button>;
     } else {
@@ -396,7 +376,7 @@ function ShareLink({ activeFile, activeLink, setActiveLink, setActiveModal }) {
         >
           Cancel
         </button>
-        {linkButton}
+        <LoaderButton pending={pending}>{linkButton}</LoaderButton>
       </div>
     </div>
   );

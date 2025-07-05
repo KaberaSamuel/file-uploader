@@ -3,7 +3,7 @@ import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import { apiUrl, extractData } from "../../service";
 import Navbar from "./Navbar";
-import Loader from "./Loader";
+import LoaderButton from "./LoaderButton";
 import "../styles/forms.css";
 
 function Login() {
@@ -12,20 +12,20 @@ function Login() {
     password: "",
   });
   const { username, password } = formFields;
-  
+
   const [seePassword, setSeePassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const navigate = useNavigate();
   const { dataTree, setDataTree } = useAuth();
-  const [isLoading, setIsLoading] = useState(false)
+  const [pending, setPending] = useState(false);
   const user = dataTree[0];
-  
+
   async function handleSubmit(e) {
     e.preventDefault();
-    
+
     // showing loading screen as we fetch data
-    setIsLoading(true);
+    setPending(true);
     const response = await fetch(`${apiUrl}/login`, {
       method: "POST",
       headers: {
@@ -41,10 +41,10 @@ function Login() {
     } else {
       const dataTree = await extractData(response);
       setDataTree(dataTree);
-      
+
       navigate("/folders").then(
         setTimeout(() => {
-          setIsLoading(false);
+          setPending(false);
         }, 500)
       );
     }
@@ -52,10 +52,6 @@ function Login() {
 
   // redirecting the user to the homepage if already authenticated
   if (user) return <Navigate to="/folders" />;
-  
-  if (isLoading) {
-    return <Loader />;
-  }
 
   return (
     <div>
@@ -114,9 +110,9 @@ function Login() {
 
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-          <div>
+          <LoaderButton pending={pending}>
             <button type="submit">Log In</button>
-          </div>
+          </LoaderButton>
         </form>
       </main>
     </div>

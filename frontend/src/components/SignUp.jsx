@@ -1,8 +1,9 @@
 import { Link, useNavigate, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Navbar from "./Navbar";
 import { useAuth } from "./AuthProvider";
 import { apiUrl } from "../../service";
+import Navbar from "./Navbar";
+import LoaderButton from "./LoaderButton";
 import "../styles/forms.css";
 
 function SignUp() {
@@ -12,41 +13,53 @@ function SignUp() {
     password1: "",
     password2: "",
   });
+  const [pending, setPending] = useState(false);
 
   const { username, password1, password2 } = formFields;
   const [seePassword, setSeePassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const { dataTree } = useAuth();
-  const user = dataTree[0]
+  const { dataTree, allUsers } = useAuth();
+  const user = dataTree[0];
 
-  // useEffect to checkpasswords
+  // Effect to track password fields change
   useEffect(() => {
-    function checkPasswords() {
-      if (password2 !== "" && password1 !== password2) {
-        setErrorMessage("Passwords don't match");
-      } else {
-        setErrorMessage("");
-      }
+    if (password2 !== "" && password1 !== password2) {
+      setErrorMessage("Passwords don't match");
+    } else {
+      setErrorMessage("");
     }
-
-    checkPasswords();
   }, [password1, password2]);
+
+  // Effect to track username field change
+  useEffect(() => {
+    if (allUsers.includes(username)) {
+      setErrorMessage("User already present");
+    } else {
+      setErrorMessage(null);
+    }
+  }, [username]);
 
   // redirecting user to the homepage if already authenticated
   if (user) return <Navigate to="/folders" />;
 
   async function handleSubmit(e) {
     e.preventDefault();
-    if (password1 === password2) {
-      await fetch(`${apiUrl}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formFields),
-      });
-      navigate("/login");
+    if (!allUsers.includes(username)) {
+      if (password1 === password2) {
+        setPending(true);
+        await fetch(`${apiUrl}/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formFields),
+        });
+        navigate("/login");
+        setPending(false);
+      } else {
+        alert("passwords don't match");
+      }
     } else {
-      alert("passwords don't match");
+      setErrorMessage("User already present");
     }
   }
 
@@ -126,9 +139,9 @@ function SignUp() {
 
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
-          <div>
-            <button type="submit">Create Account</button>
-          </div>
+          <LoaderButton pending={pending}>
+            <button type="submit">Sign Up</button>
+          </LoaderButton>
         </form>
       </main>
     </div>

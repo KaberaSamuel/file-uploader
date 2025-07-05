@@ -62,10 +62,17 @@ form {
   border: 1px solid gray;
 }
 
-.form-container button:hover {
+.form-container button:hover,
+.form-container button.loading {
   color: var(--lightblue);
   background-color: var(--hover-bg);
   border: 1px solid var(--lightblue);
+}
+
+.form-container button .pending {
+  background: radial-gradient(farthest-side, var(--lightblue) 94%, #0000)
+      top/3px 3px no-repeat,
+    conic-gradient(#0000 30%, var(--lightblue));
 }
 
 form .error-message {

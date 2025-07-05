@@ -106,12 +106,14 @@
   border: 2px solid var(--lightblue);
 }
 
+.modal .loader-parent {
+  align-self: flex-end;
+}
+
 .modal button {
   color: var(--darkgray);
   font-weight: 600;
   padding: 10px 20px;
-  align-self: flex-end;
-  min-width: 70px;
   background-color: var(--lightblue);
   border: none;
 }
@@ -130,6 +132,12 @@
   background-color: var(--dark);
   color: white;
   border: 1px solid gray;
+}
+
+.modal .buttons .cancel:hover {
+  color: var(--lightblue);
+  background-color: var(--hover-bg);
+  border: 1px solid var(--lightblue);
 }
 
 .modal .links-duration {
@@ -208,16 +216,6 @@
   gap: 10px;
 }
 
-.file-info .buttons :last-child {
-  color: var(--dark);
-  background-color: var(--lightblue);
-  border: none;
-}
-
-.file-info .buttons :last-child:hover {
-  background-color: var(--lightgreen);
-}
-
 .file-info button {
   border: 1px solid gray;
   background-color: var(--lightdark);
@@ -229,8 +227,19 @@
   border: 1px solid var(--lightblue);
 }
 
-.file-info button .pending {
-  margin: 0 10px;
+.file-info .loader-parent {
+  background-color: var(--darkgray);
+}
+
+.file-info .loader-parent button {
+  color: var(--dark);
+  background-color: var(--lightblue);
+  border: none;
+}
+
+.file-info .loader-parent button:hover {
+  background-color: var(--lightgreen);
+  color: var(--dark);
 }
 
 .file-info .header,
@@ -253,6 +262,15 @@
 }
 
 /* CSS Loaders */
+button.loading {
+  padding: 10px 30px !important;
+}
+
+.loader-parent {
+  height: fit-content;
+  width: fit-content;
+}
+
 .pending {
   width: 20px;
   aspect-ratio: 1;

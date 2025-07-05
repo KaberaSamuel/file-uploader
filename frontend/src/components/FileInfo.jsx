@@ -5,6 +5,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { useAuth } from "./AuthProvider";
 import { extractData, apiUrl } from "../../service";
+import LoaderButton from "./LoaderButton";
 
 function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -112,23 +113,15 @@ function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
                 Share
               </button>
 
-              {isDeleting ? (
-                <button>
-                  <div className="pending"></div>
-                </button>
-              ) : (
+              <LoaderButton pending={isDeleting}>
                 <button className="delete" onClick={deleteFile}>
                   Delete
                 </button>
-              )}
+              </LoaderButton>
 
-              {isDownloading ? (
-                <button>
-                  <div className="pending"></div>
-                </button>
-              ) : (
+              <LoaderButton pending={isDownloading}>
                 <button onClick={downloadFile}>Download</button>
-              )}
+              </LoaderButton>
             </div>
           </motion.div>
         </div>
