@@ -1,26 +1,9 @@
-nav div:nth-child(2) {
-  display: flex;
-  gap: 15px;
-}
-
-nav div:nth-child(2) a {
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 1px solid white;
-}
-
-nav div:nth-child(2) a:hover {
-  color: var(--lightblue);
-  background-color: var(--hover-bg);
-  border: 1px solid var(--lightblue);
-}
-
-.form-container {
-  position: fixed;
-  inset: var(--nav-height) 0 0 50px;
+main {
+  padding: 0 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: calc(100vh - var(--nav-height) - 10px);
 }
 
 form {
@@ -33,50 +16,71 @@ form {
   font-size: 1rem;
 }
 
-.form-container a {
+form a {
   text-decoration: underline;
   color: var(--lightblue);
 }
 
-.form-container h1 {
+h1 {
   font-size: 1.7rem;
 }
 
-.form-container input,
-.form-container input:autofill {
+input,
+input:autofill {
   color: var(--lightblue) !important;
   background-color: var(--lightdark) !important;
   border: 1px solid gray;
 }
 
-.form-container input:-webkit-autofill {
+input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px var(--lightdark) inset !important;
   -webkit-text-fill-color: var(--lightblue) !important;
 }
 
-.form-container input:focus {
+input:focus {
   border: 2px solid var(--lightblue);
 }
 
-.form-container button {
+button {
   border: 1px solid gray;
 }
 
-.form-container button:hover,
-.form-container button.loading {
+button:hover,
+button.loading {
   color: var(--lightblue);
   background-color: var(--hover-bg);
   border: 1px solid var(--lightblue);
 }
 
-.form-container button .pending {
+button .pending {
   background: radial-gradient(farthest-side, var(--lightblue) 94%, #0000)
       top/3px 3px no-repeat,
     conic-gradient(#0000 30%, var(--lightblue));
 }
 
 form .error-message {
-  color: rgb(255, 70, 70);
   font-size: var(--sfs);
   text-transform: capitalize;
+}
+
+/* CSS Media queries for mobile devices */
+
+@media (max-width: 500px) {
+  main {
+    display: block;
+    padding: 50px 20px;
+  }
+
+  h1 {
+    font-size: var(--lfs);
+  }
+
+  form {
+    width: 100%;
+    gap: 20px;
+  }
+
+  form input {
+    margin-top: 15px;
+  }
 }

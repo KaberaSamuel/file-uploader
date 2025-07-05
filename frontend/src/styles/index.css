@@ -9,7 +9,7 @@
   --fs: 1rem;
   --lfs: 1.7rem;
   --darkgray: rgb(50, 50, 60);
-  --white: rgb(255, 255, 255);
+  --white: rgb(245, 245, 245);
   --lightwhite: rgb(172, 172, 172);
   --lightblue: rgb(69, 199, 255);
   --lightblue2: rgb(65, 113, 150);
@@ -37,10 +37,6 @@ a {
   text-decoration: none;
 }
 
-a[href="/folders"] {
-  font-size: 1.7rem;
-}
-
 h1 {
   font-weight: 600;
 }
@@ -49,27 +45,14 @@ ul {
   list-style: none;
 }
 
-nav {
-  padding: 0 20px;
-  height: var(--nav-height);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--darkgray);
-}
-
-nav .icon:hover {
-  color: var(--lightblue);
-}
-
 input,
 button {
   margin-top: 8px;
   width: 100%;
   padding: 11px 15px;
-  color: white;
+  color: var(--lightwhite);
   background-color: var(--lightdark);
-  border: 1px solid white;
+  border: 1px solid gray;
   border-radius: 5px;
   outline: none;
 }
@@ -95,7 +78,7 @@ input::file-selector-button {
   background-color: var(--lightdark);
   color: var(--white);
   margin-right: 20px;
-  border: 1px solid white;
+  border: 1px solid gray;
   border-radius: 5px;
 }
 
@@ -116,4 +99,12 @@ input::file-selector-button {
   z-index: 20;
   border-radius: 20px;
   border: 2px solid var(--lightblue);
+}
+
+@media (max-width: 500px) {
+  :root {
+    --sfs: 0.8rem;
+    --fs: 1rem;
+    --lfs: 1.3rem;
+  }
 }

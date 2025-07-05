@@ -1,4 +1,8 @@
-const apiUrl = "https://file-uploader-xctw.onrender.com";
+const node_env = process.env.NODE_ENV;
+const apiUrl =
+  node_env === "production"
+    ? "https://file-uploader-xctw.onrender.com"
+    : "http://localhost:3000";
 
 function getDateString(milliSecs) {
   const date = new Date(milliSecs);

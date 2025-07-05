@@ -72,11 +72,11 @@ async function authenticateUser(req, res, next) {
   }
 }
 
-api.get("/users", async(req,res) => {
-  const allUsers = await getAllUsers()
-  const allUsernames = allUsers.map(user => user.name)
-  res.json(allUsernames)
-})
+api.get("/users", async (req, res) => {
+  const allUsers = await getAllUsers();
+  const allUsernames = allUsers.map((user) => user.name);
+  res.json(allUsernames);
+});
 
 api.get("/folders", authenticateUser, async (req, res) => {
   const user = req.user;
@@ -224,8 +224,6 @@ api.post("/download", async (req, res) => {
   const buffer = await data.arrayBuffer();
   res.end(Buffer.from(buffer));
 });
-
-
 
 api.post("/register", async (req, res, next) => {
   try {

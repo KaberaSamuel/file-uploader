@@ -1,0 +1,52 @@
+nav {
+  padding: 0 20px;
+  height: var(--nav-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--darkgray);
+}
+
+nav .icon:hover {
+  color: var(--lightblue);
+}
+
+nav div {
+  display: flex;
+  gap: 15px;
+}
+
+nav div a {
+  padding: 10px 15px;
+  border-radius: 5px;
+  color: var(--lightwhite);
+  border: 1px solid gray;
+}
+
+nav div a:hover {
+  color: var(--lightblue);
+  background-color: var(--hover-bg);
+  border: 1px solid var(--lightblue);
+}
+
+nav a[href="/folders"] {
+  font-size: 1.7rem;
+}
+
+@media (max-width: 500px) {
+  nav {
+    height: auto;
+    gap: 30px;
+  }
+
+  nav a[href="/folders"] {
+    width: 60px;
+    text-align: left;
+    font-size: var(--lfs);
+    padding: 15px 0;
+  }
+
+  a {
+    padding: 10px;
+  }
+}

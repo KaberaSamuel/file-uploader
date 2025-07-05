@@ -4,7 +4,7 @@ import { useAuth } from "./AuthProvider";
 import { apiUrl, extractData } from "../../service";
 import Navbar from "./Navbar";
 import LoaderButton from "./LoaderButton";
-import "../styles/forms.css";
+import "../styles/public.css";
 
 function Login() {
   const [formFields, setFormFields] = useState({
@@ -54,10 +54,10 @@ function Login() {
   if (user) return <Navigate to="/folders" />;
 
   return (
-    <div>
+    <div className="public">
       <Navbar />
 
-      <main className="form-container login">
+      <main>
         <form onSubmit={handleSubmit}>
           <h1>Login </h1>
           <p>

@@ -4,7 +4,7 @@ import { useAuth } from "./AuthProvider";
 import { apiUrl } from "../../service";
 import Navbar from "./Navbar";
 import LoaderButton from "./LoaderButton";
-import "../styles/forms.css";
+import "../styles/public.css";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -64,10 +64,10 @@ function SignUp() {
   }
 
   return (
-    <div>
+    <div className="public">
       <Navbar />
 
-      <main className="form-container">
+      <main>
         <form onSubmit={handleSubmit}>
           <h1>Sign Up</h1>
           <p>
