@@ -21,12 +21,12 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .folder-content li .item,
 .folder-content li.header {
-  font-size: 0.9rem;
+  font-size: var(--sfs);
   display: grid;
   grid-template-columns: 50% 25% 25%;
   padding: 10px;
@@ -77,7 +77,7 @@
   font-size: var(--fs);
 }
 
-.folder-content .path-bar .icon {
+.folder-content .path-bar svg {
   transform: translateY(3px);
 }
 
@@ -97,9 +97,13 @@
   font-size: 1.2rem;
 }
 
-.modal .first .icon {
+.modal .first svg {
   font-weight: 700;
   font-size: 1.2rem;
+}
+
+.modal .first svg:hover {
+  color: var(--lightblue);
 }
 
 .modal input {
@@ -169,8 +173,6 @@
   background-color: var(--lightblue);
   color: var(--dark);
 }
-
-/* .modal .links-duration .durations{} */
 
 .modal .links-duration .durations > :last-child {
   border: none;
@@ -247,11 +249,11 @@
   font-weight: 700;
 }
 
-.file-info .icon {
+.file-info svg {
   color: gray;
 }
 
-.file-info .icon:hover {
+.file-info svg:hover {
   color: var(--lightblue);
 }
 
@@ -285,5 +287,55 @@ button.loading {
 @keyframes l13 {
   100% {
     transform: rotate(1turn);
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard {
+    all: revert;
+  }
+
+  .app nav a[href="/folders"] {
+    width: fit-content;
+  }
+
+  .app nav svg,
+  .sidebar svg {
+    font-size: var(--lfs);
+  }
+
+  .folder-content {
+    padding: 10px;
+  }
+
+  .folder-content li .item,
+  .folder-content li.header {
+    grid-template-columns: repeat(3, 1fr);
+    padding: 10px;
+  }
+
+  .folder-content li.header > :first-child {
+    text-align: left;
+  }
+
+  .folder-content .path-bar,
+  .folder-content .path-bar div {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .folder-content .path-bar a {
+    color: var(--lightblue);
+    font-size: var(--sfs);
+  }
+
+  .folder-content .path-bar svg {
+    transform: unset;
+    font-size: var(--sfs);
+  }
+
+  .folder-content ul {
+    gap: 8px;
   }
 }

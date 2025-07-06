@@ -44,7 +44,6 @@ function CreateFolder({ setActiveModal }) {
       <div className="first">
         <p>New Folder</p>
         <FontAwesomeIcon
-          className="icon"
           icon={faXmark}
           onClick={() => {
             setActiveModal(null);
@@ -115,7 +114,6 @@ function DeleteFolder({ setActiveModal }) {
       <div className="first">
         <p>Delete Folder</p>
         <FontAwesomeIcon
-          className="icon"
           icon={faXmark}
           onClick={() => {
             setActiveModal(null);
@@ -197,7 +195,6 @@ function AddFile({ setActiveModal }) {
       <div className="first">
         <p>New File</p>
         <FontAwesomeIcon
-          className="icon"
           icon={faXmark}
           onClick={() => {
             setActiveModal(null);
@@ -312,7 +309,6 @@ function ShareLink({ activeFile, activeLink, setActiveLink, setActiveModal }) {
       <div className="first">
         <p>New File</p>
         <FontAwesomeIcon
-          className="icon"
           icon={faXmark}
           onClick={() => {
             setActiveModal(null);

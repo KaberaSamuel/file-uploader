@@ -77,7 +77,6 @@ function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
             <div className="header">
               <p>File Information</p>
               <FontAwesomeIcon
-                className="icon"
                 icon={faXmark}
                 onClick={() => {
                   setActiveFile(null);

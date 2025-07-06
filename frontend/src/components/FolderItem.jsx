@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFolderClosed,
   faChevronRight,
-  faFile
+  faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { useParams, useOutletContext, Link } from "react-router-dom";
 import {
@@ -28,10 +28,10 @@ function Items({ folders, files, setActiveFile }) {
           <li key={id}>
             <Link to={`/folders/${id}`} className="item">
               <div className="label">
-                <FontAwesomeIcon className="icon" icon={faFolderClosed} />
+                <FontAwesomeIcon icon={faFolderClosed} />
                 <p>{name}</p>
               </div>
-              <p>--</p> 
+              <p>--</p>
               <p>{date}</p>
             </Link>
           </li>
@@ -39,24 +39,28 @@ function Items({ folders, files, setActiveFile }) {
 
         {/* rendering child files */}
         {files.map((file) => {
-          const { id, name, created_at, convertedSize } = file
-          let date = created_at.split(",").slice(0, -1)
-          date = date.join(",")
-          
+          const { id, name, created_at, convertedSize } = file;
+          let date = created_at.split(",").slice(0, -1);
+          date = date.join(",");
+
           return (
-          <li key={id} onClick={() => {setActiveFile(file)}}>
+            <li
+              key={id}
+              onClick={() => {
+                setActiveFile(file);
+              }}
+            >
               <div className="item">
                 <div className="label">
-                  <FontAwesomeIcon className="icon" icon={faFile} />
+                  <FontAwesomeIcon icon={faFile} />
                   <p>{name}</p>
                 </div>
-                <p>{convertedSize}</p> 
+                <p>{convertedSize}</p>
                 <p>{date}</p>
               </div>
-          </li>
-        )
+            </li>
+          );
         })}
-        
       </ul>
     );
   } else {
@@ -67,7 +71,6 @@ function Items({ folders, files, setActiveFile }) {
     );
   }
 }
-
 
 function FolderView({ pathArray, folders, files, setActiveFile }) {
   const lastIndex = pathArray.length - 1;
@@ -80,7 +83,7 @@ function FolderView({ pathArray, folders, files, setActiveFile }) {
             return (
               <div key={id}>
                 <Link to={hrefLink}>{name}</Link>
-                <FontAwesomeIcon className="icon" icon={faChevronRight} />
+                <FontAwesomeIcon icon={faChevronRight} />
               </div>
             );
           } else {
@@ -93,7 +96,7 @@ function FolderView({ pathArray, folders, files, setActiveFile }) {
         })}
       </div>
 
-      <Items folders={folders} files={files} setActiveFile={setActiveFile}/>
+      <Items folders={folders} files={files} setActiveFile={setActiveFile} />
     </div>
   );
 }
@@ -103,13 +106,12 @@ function FolderItem() {
   let { id } = useParams();
   id = Number(id);
 
-  
   const { dataTree } = useAuth();
   const folder = getFolderById(id, dataTree);
   const pathArray = getPathArray(folder, dataTree);
   const childFiles = getFilesInFolder(id, dataTree);
-  
-  const {setActiveFile} = useOutletContext()
+
+  const { setActiveFile } = useOutletContext();
 
   return (
     <FolderView
@@ -127,10 +129,17 @@ function DefaultFolderItem() {
   const user = dataTree[0];
   const pathArray = [{ name: user.name, id: 0 }];
   const childFiles = getFilesInFolder(null, dataTree);
-  
-  const {setActiveFile} = useOutletContext()
 
-  return <FolderView pathArray={pathArray} folders={user.children} files={childFiles} setActiveFile={setActiveFile}/>;
+  const { setActiveFile } = useOutletContext();
+
+  return (
+    <FolderView
+      pathArray={pathArray}
+      folders={user.children}
+      files={childFiles}
+      setActiveFile={setActiveFile}
+    />
+  );
 }
 
 export { DefaultFolderItem, FolderItem };

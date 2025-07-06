@@ -17,7 +17,6 @@ function TreeNode({ node }) {
         {node.children && (
           <FontAwesomeIcon
             icon={isOpen ? faSquareMinus : faSquarePlus}
-            className="icon"
             onClick={toggleNode}
           />
         )}

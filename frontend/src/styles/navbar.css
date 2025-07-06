@@ -7,7 +7,7 @@ nav {
   border-bottom: 1px solid var(--darkgray);
 }
 
-nav .icon:hover {
+nav svg:hover {
   color: var(--lightblue);
 }
 
@@ -33,14 +33,14 @@ nav a[href="/folders"] {
   font-size: 1.7rem;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   nav {
     height: auto;
     gap: 30px;
   }
 
   nav a[href="/folders"] {
-    width: 60px;
+    width: 50px;
     text-align: left;
     font-size: var(--lfs);
     padding: 15px 0;

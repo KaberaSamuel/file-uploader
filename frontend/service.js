@@ -1,6 +1,5 @@
-const node_env = process.env.NODE_ENV;
 const apiUrl =
-  node_env === "production"
+  process.env.NODE_ENV === "production"
     ? "https://file-uploader-xctw.onrender.com"
     : "http://localhost:3000";
 

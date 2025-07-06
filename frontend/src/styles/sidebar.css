@@ -31,7 +31,7 @@
 }
 
 .tree-view .MuiTreeItem-content:hover {
-  color: var(--lightblue); 
+  color: var(--lightblue);
 }
 
 .tree-view .Mui-selected {
@@ -53,4 +53,34 @@
 
 .sidebar .delete:hover {
   background-color: var(--lightgreen);
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    position: fixed;
+    inset: auto 0 0 0;
+    height: fit-content;
+    padding: 15px 0;
+    border-top: 1px solid var(--darkgray);
+  }
+
+  .sidebar .links,
+  .sidebar .links div {
+    all: revert;
+    color: gray;
+  }
+
+  .sidebar .links {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .sidebar svg:hover {
+    color: var(--lightblue);
+  }
+
+  .tree-view,
+  .sidebar .links p {
+    display: none;
+  }
 }

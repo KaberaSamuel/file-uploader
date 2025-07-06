@@ -5,6 +5,7 @@
 }
 
 :root {
+  --xsfs: 0.6rem;
   --sfs: 0.8rem;
   --fs: 1rem;
   --lfs: 1.7rem;
@@ -101,10 +102,8 @@ input::file-selector-button {
   border: 2px solid var(--lightblue);
 }
 
-@media (max-width: 500px) {
+@media (max-width: 600px) {
   :root {
-    --sfs: 0.8rem;
-    --fs: 1rem;
-    --lfs: 1.3rem;
+    --lfs: 1.5rem;
   }
 }
