@@ -6,6 +6,7 @@ import { useAuth } from "./AuthProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import LoaderButton from "./LoaderButton";
+import "../styles/modal.css";
 
 function CreateFolder({ setActiveModal }) {
   const { id } = useParams();
@@ -106,11 +107,7 @@ function DeleteFolder({ setActiveModal }) {
   }
 
   return (
-    <form
-      onSubmit={deleteFolder}
-      className="delete-folder"
-      style={{ lineHeight: "2rem", fontSize: "1.1rem" }}
-    >
+    <form onSubmit={deleteFolder} className="delete-folder">
       <div className="first">
         <p>Delete Folder</p>
         <FontAwesomeIcon
@@ -305,7 +302,7 @@ function ShareLink({ activeFile, activeLink, setActiveLink, setActiveModal }) {
   }, [activeLink]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+    <div className="share-link">
       <div className="first">
         <p>New File</p>
         <FontAwesomeIcon

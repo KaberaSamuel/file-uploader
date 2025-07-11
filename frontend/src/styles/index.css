@@ -69,7 +69,8 @@ input[type="checkbox"] {
 }
 
 input[type="file"] {
-  border: none;
+  border: none !important;
+  color: white;
   background-color: var(--darkgray);
   font-size: 1.05rem;
 }
@@ -105,5 +106,23 @@ input::file-selector-button {
 @media (max-width: 600px) {
   :root {
     --lfs: 1.5rem;
+  }
+
+  .modal {
+    width: 90vw;
+    padding: 20px;
+  }
+
+  .modal * {
+    font-size: var(--fs);
+  }
+
+  input::file-selector-button {
+    padding: 7px 13px;
+    background-color: var(--lightdark);
+    color: var(--white);
+    margin-right: 20px;
+    border: 1px solid gray;
+    border-radius: 5px;
   }
 }
