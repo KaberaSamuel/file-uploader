@@ -1,11 +1,3 @@
-.not-found a {
-  margin-top: 20px;
-  font-size: 1rem !important;
-  padding: 10px 20px;
-  border: 1px solid white;
-  border-radius: 20px;
-}
-
 .not-found {
   width: 100vw;
   height: 100vh;
@@ -14,4 +6,13 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.not-found a {
+  margin-top: 20px;
+  font-size: 1rem !important;
+  padding: 10px 20px;
+  border: 1px solid white;
+  border-radius: 20px;
+  border: 2px solid;
 }

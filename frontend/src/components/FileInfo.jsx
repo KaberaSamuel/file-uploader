@@ -6,6 +6,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useAuth } from "./AuthProvider";
 import { extractData, apiUrl } from "../../service";
 import LoaderButton from "./LoaderButton";
+import "../styles/file-info.css";
 
 function FileInfo({ activeFile, setActiveFile, setActiveModal }) {
   const [isDeleting, setIsDeleting] = useState(false);

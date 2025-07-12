@@ -1,0 +1,90 @@
+/* File page styles */
+.file-info {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  padding: 20px;
+  background-color: var(--darkgray);
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.file-info .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-size: 1.2rem;
+}
+
+.file-info .middle {
+  flex-grow: 1;
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.file-info .buttons {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  gap: 10px;
+}
+
+.file-info button {
+  border: 1px solid gray;
+  background-color: var(--lightdark);
+}
+
+.file-info button:hover {
+  color: var(--lightblue);
+  background-color: var(--hover-bg);
+  border: 1px solid var(--lightblue);
+}
+
+.file-info .loader-parent {
+  background-color: var(--darkgray);
+}
+
+.file-info .loader-parent button {
+  color: var(--dark);
+  background-color: var(--lightblue);
+  border: none;
+}
+
+.file-info .loader-parent button:hover {
+  background-color: var(--lightgreen);
+  color: var(--dark);
+}
+
+.file-info .header,
+.file-info .middle span {
+  font-weight: 700;
+}
+
+.file-info svg {
+  color: gray;
+}
+
+.file-info svg:hover {
+  color: var(--lightblue);
+}
+
+.file-info-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: var(--backdrop-color);
+}
+
+@media (max-width: 600px) {
+  .file-info {
+    width: 100vw;
+  }
+}
